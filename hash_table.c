@@ -29,8 +29,6 @@ static entry_t *find_previous_entry_for_key(entry_t *address, int key)
     }
   //printf("Cursor key not found: %p\n", cursor);
   //printf("first_entry: %p\n", first_entry);
-  first_entry->next = NULL;
-  first_entry->key = key;
   return first_entry;
 }
 
@@ -60,7 +58,7 @@ void ioopm_hash_table_insert(ioopm_hash_table_t *ht, int key, char *value)
   //printf("Entry key: %d\n", entry->key);
   //printf("Entry value: %s\n", entry->value);
   entry_t *next = entry->next;
-  //printf("Entry next: %p\n", next);
+  printf("Entry next: %p\n", next);
 
   /// Check if the next entry should be updated or not
   if (next != NULL && next->key == key)
