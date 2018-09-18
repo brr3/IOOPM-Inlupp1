@@ -33,7 +33,7 @@ static entry_t *find_previous_entry_for_key(entry_t *address, int key)
 }
 
 
-entry_t *entry_create(int key, char *value, entry_t *next)
+static entry_t *entry_create(int key, char *value, entry_t *next)
 {
   entry_t *new_entry = calloc(1, sizeof(entry_t));
 
@@ -58,7 +58,7 @@ void ioopm_hash_table_insert(ioopm_hash_table_t *ht, int key, char *value)
   //printf("Entry key: %d\n", entry->key);
   //printf("Entry value: %s\n", entry->value);
   entry_t *next = entry->next;
-  printf("Entry next: %p\n", next);
+  //printf("Entry next: %p\n", next);
 
   /// Check if the next entry should be updated or not
   if (next != NULL && next->key == key)
@@ -70,6 +70,25 @@ void ioopm_hash_table_insert(ioopm_hash_table_t *ht, int key, char *value)
       entry->next = entry_create(key, value, next);
       ht->buckets[bucket] = *entry->next;
       //printf("Pointer at key %d: %p\n", key, ht->buckets[bucket].value);
+    }
+}
+
+
+char **ioopm_hash_table_lookup(ioopm_hash_table_t *ht, int key)
+{
+  /// Find the previous entry for key
+  entry_t *tmp = find_previous_entry_for_key(&ht->buckets[key % 17], key);
+  //printf("tmp key: %d\n", tmp->key);
+  //printf("tmp value: %s\n", tmp->value);
+  //printf("tmp next: %p\n", tmp->next);
+  
+  if (tmp->key == key)
+    {    
+      return &tmp->value;
+    }
+  else
+    {
+      return NULL; 
     }
 }
 

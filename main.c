@@ -1,16 +1,14 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
 #include "hash_table.h"
 
 
-void test_insert1()
+ioopm_hash_table_t test_insert(ioopm_hash_table_t *ht, int key, char *value)
 {
-  ioopm_hash_table_t *h = ioopm_hash_table_create();
-  int key = 1;
-  char *value = "abc";
-  int bucket = key % 17;
-  ioopm_hash_table_insert(h, key, value);
-  printf("Value at key %d: %s\n", key, h->buckets[bucket].value);
+  ioopm_hash_table_insert(ht, key, value);
+  printf("Value at key %d: %s\n", key, ht->buckets[key % 17].value);
+  return *ht;
 }
 
 
@@ -60,15 +58,53 @@ void test_insert4()
 }
 
 
+bool test_lookup(ioopm_hash_table_t *ht, int key)
+{
+  char **value_ptr = ioopm_hash_table_lookup(ht, key);
+  char *value = NULL; // no value yet
+  if (value_ptr != NULL)
+    {
+      // key was in ht
+      value = *value_ptr; // Value now points to the string the key maps to in ht
+      printf("Value for key %d found: %s\n", key, value);
+      // *value_ptr = "Some other string"; // We just updated the value!
+      return true;
+    }
+  else
+    {
+      printf("Key not found.\n");
+      return false;
+    }
+}
+
+
 int main(void)
 {
+  ioopm_hash_table_t *ht_empty = ioopm_hash_table_create();
+  ioopm_hash_table_t *ht = ioopm_hash_table_create();
+
   puts("Test 1 (insert 1 value)");
-  test_insert1();
+  *ht = test_insert(ht, 1, "abc");
+  *ht = test_insert(ht, 2, "cde");
+  
   puts("Test 2 (insert 2 values with same key)");
   test_insert2();
+  
   puts("Test 3 (insert 2 values with different keys)");
   test_insert3();
+  
   puts("Test 4 (insert 2 values with different keys but same bucket)");
   test_insert4();
+  
+  puts("Test 5 (lookup key in hash table with 2 entries)");
+  assert(test_lookup(ht, 1) == true);
+  assert(test_lookup(ht, 2) == true);
+
+  puts("Test 6 (lookup key in hash table with 2 entries where 1 has been overwritten)");
+  *ht = test_insert(ht, 1, "cde");
+  assert(test_lookup(ht, 1) == true);
+  
+  puts("Test 7 (lookup key in empty hash table)");
+  assert(test_lookup(ht_empty, 1) == false);
   return 0;
 }
