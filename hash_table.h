@@ -3,7 +3,7 @@
 
 typedef struct entry entry_t;
 typedef struct hash_table ioopm_hash_table_t;
-typedef struct option option_t;
+
 
 struct entry
 {
@@ -15,12 +15,6 @@ struct entry
 struct hash_table
 {
   entry_t buckets[17];
-};
-
-struct option
-{
-  bool defined;
-  char *value;
 };
 
 
