@@ -37,7 +37,12 @@ int main(void)
   ioopm_hash_table_t *ht = ioopm_hash_table_create();
 
   *ht = test_insert(ht, 1, "abc");
-  test_insert(ht, 1, "cde");
+  *ht = test_insert(ht, 2, "cde");
+  *ht = test_insert(ht, 18, "fgh");
+
+  puts("Lookup test");
+  test_lookup(ht, 1);
+  test_lookup(ht, 18);
   
   return 0;
 }

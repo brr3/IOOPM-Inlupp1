@@ -15,17 +15,18 @@ ioopm_hash_table_t *ioopm_hash_table_create()
 static entry_t *find_previous_entry_for_key(entry_t *address, int key)
 {
   entry_t *first_entry = address;
-  entry_t *cursor = first_entry->next;
-  entry_t *previous = first_entry;
+  entry_t *next_entry = first_entry->next;
+  entry_t *previous_entry = first_entry;
   
-  while (cursor != NULL)
+  while (next_entry != NULL)
     {
-      if (cursor->key == key)
+      if (next_entry->key == key)
         {
-          printf("----Cursor key found: %p\n", cursor);
-          return previous; /// Ends the whole function!
+          printf("----Cursor key found: %p\n", next_entry);
+          return previous_entry; /// Ends the whole function!
         }
-      cursor = cursor->next; /// Step forward to the next entry, and repeat loop
+      previous_entry = next_entry;
+      next_entry = next_entry->next; /// Step forward to the next entry, and repeat loop
     }
   puts("----Key not found!");
   return first_entry;
@@ -74,7 +75,7 @@ char **ioopm_hash_table_lookup(ioopm_hash_table_t *ht, int key)
   /// Find the previous entry for key
   entry_t *tmp = find_previous_entry_for_key(&ht->buckets[key % 17], key);
   
-  if (tmp->key == key)
+  if (tmp->next->key == key)
     {    
       return &tmp->value;
     }
