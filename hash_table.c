@@ -22,13 +22,13 @@ static entry_t *find_previous_entry_for_key(entry_t *address, int key)
     {
       if (next_entry->key == key)
         {
-          printf("----Cursor key found: %p\n", next_entry);
+          //printf("----Cursor key found: %p\n", next_entry);
           return previous_entry; /// Ends the whole function!
         }
       previous_entry = next_entry;
       next_entry = next_entry->next; /// Step forward to the next entry, and repeat loop
     }
-  puts("----Key not found!");
+  //puts("----Key not found!");
   return first_entry;
 }
 
@@ -40,10 +40,10 @@ static entry_t *entry_create(int key, char *value, entry_t *next)
   new_entry->key = key;
   new_entry->value = value;
   new_entry->next = next;
-  printf("new_entry key = %d\n", key);
-  printf("new_entry value = %s\n", value);
-  printf("new entry next = %p\n", next);
-  printf("new entry = %p\n", new_entry);
+  //printf("new_entry key = %d\n", key);
+  //printf("new_entry value = %s\n", value);
+  //printf("new entry next = %p\n", next);
+  //printf("new entry = %p\n", new_entry);
 
   return new_entry;                      
 }
@@ -52,7 +52,7 @@ static entry_t *entry_create(int key, char *value, entry_t *next)
 void ioopm_hash_table_insert(ioopm_hash_table_t *ht, int key, char *value)
 {
   /// Calculate the bucket for this entry
-  int bucket = key % 17;
+  int bucket = key % No_Buckets;
   /// Search for an existing entry for a key
   entry_t *entry = find_previous_entry_for_key(&ht->buckets[bucket], key);
   entry_t *next = entry->next;
@@ -73,15 +73,101 @@ void ioopm_hash_table_insert(ioopm_hash_table_t *ht, int key, char *value)
 char **ioopm_hash_table_lookup(ioopm_hash_table_t *ht, int key)
 {
   /// Find the previous entry for key
-  entry_t *tmp = find_previous_entry_for_key(&ht->buckets[key % 17], key);
+  entry_t *entry = find_previous_entry_for_key(&ht->buckets[key % No_Buckets], key);
+  entry_t *next = entry->next;
   
-  if (tmp->next->key == key)
+  if (next != NULL && next->key == key)
     {    
-      return &tmp->value;
+      return &next->value;
     }
   else
     {
       return NULL; 
+    }
+}
+
+
+static void entry_destroy(entry_t *pointer)
+{
+  printf("Value \"%s\" destroyed!\n", pointer->value);
+  free(pointer);
+}
+
+
+char *ioopm_hash_table_remove(ioopm_hash_table_t *ht, int key)                                               
+{                                                                                                             
+  /// Find the previous entry for key                                                                         
+  entry_t *entry = find_previous_entry_for_key(&ht->buckets[key % No_Buckets], key);                                  
+  entry_t *next = entry->next;
+                                                                                                              
+  if (next != NULL && next->key == key)                                                                       
+    {
+      char *removed_value = next->value;
+      entry->next = entry->next->next;
+      entry_destroy(next);
+      return removed_value;                                                                                    
+    }                                                                                                         
+  else                                                                                                        
+    {                                                                                                         
+      return NULL;                                                                                            
+    }                                                                                                        
+}
+
+
+void ioopm_hash_table_destroy(ioopm_hash_table_t *ht)
+{
+  int bucket = No_Buckets - 1;
+  while (bucket >= 0)
+    {
+      entry_t *first_entry = &ht->buckets[bucket];
+      entry_t *entry, *next;
+      printf("Bucket: %d\n", bucket);
+      printf("first_entry: %p\n", first_entry);
+      if (first_entry->next != NULL)
+        {
+          puts("next != NULL");
+          entry = first_entry->next;
+          next = entry->next;
+          //printf("Entry pointer: %p\n", entry);
+          //printf("Next pointer: %p\n", next);
+          while (next != NULL)
+            {
+              entry_destroy(entry);
+              entry = next;
+              next = entry->next;
+            }
+          entry_destroy(entry);
+        }
+      if (bucket == 0)
+        {
+          entry_destroy(first_entry);
+        }
+      --bucket;
+    }
+}
+
+
+void ioopm_hash_table_destroy_r(ioopm_hash_table_t *ht, entry_t *entry, int bucket)
+{
+  if (bucket < No_Buckets)
+    {
+      entry_t *first_entry = &ht->buckets[bucket];
+      //entry = ht->buckets[bucket].next;
+      entry_t *next = entry->next;
+      if (next == NULL)
+        {
+          entry_destroy(entry);
+          entry_destroy(first_entry);
+          int next_bucket = bucket + 1;
+          return ioopm_hash_table_destroy_r(ht, ht->buckets[next_bucket].next, next_bucket);
+        } else
+        {
+          entry_destroy(entry);
+          return ioopm_hash_table_destroy_r(ht, next, bucket);
+        }
+    } else
+    {
+      return;
     }
 }
 

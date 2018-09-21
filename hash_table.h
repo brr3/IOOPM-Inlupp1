@@ -1,8 +1,12 @@
 #pragma once
 #include <stdbool.h>
 
+
 typedef struct entry entry_t;
 typedef struct hash_table ioopm_hash_table_t;
+
+
+#define No_Buckets 17
 
 
 struct entry
@@ -14,7 +18,7 @@ struct entry
 
 struct hash_table
 {
-  entry_t buckets[17];
+  entry_t buckets[No_Buckets];
 };
 
 
@@ -31,7 +35,7 @@ void ioopm_hash_table_insert(ioopm_hash_table_t *ht, int key, char *value);
 /// @brief lookup value for key in hash table ht
 /// @param ht hash table operated upon
 /// @param key key to lookup
-/// @return the value mapped to by key (FIXME: incomplete)
+/// @return the value mapped to by key (temporary: return the pointer to the value mapped to by key)
 char **ioopm_hash_table_lookup(ioopm_hash_table_t *ht, int key);
 
 /// @brief remove any mapping from key to a value
@@ -39,3 +43,7 @@ char **ioopm_hash_table_lookup(ioopm_hash_table_t *ht, int key);
 /// @param key key to remove
 /// @return the value mapped to by key (FIXME: incomplete)
 char *ioopm_hash_table_remove(ioopm_hash_table_t *ht, int key);
+
+void ioopm_hash_table_destroy(ioopm_hash_table_t *ht);
+
+void ioopm_hash_table_destroy_r(ioopm_hash_table_t *ht, entry_t *entry, int bucket);
