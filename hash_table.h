@@ -46,4 +46,4 @@ char *ioopm_hash_table_remove(ioopm_hash_table_t *ht, int key);
 
 void ioopm_hash_table_destroy(ioopm_hash_table_t *ht);
 
-void ioopm_hash_table_destroy_r(ioopm_hash_table_t *ht, entry_t *entry, int bucket);
+//void ioopm_hash_table_destroy_r(ioopm_hash_table_t *ht, entry_t *entry, int bucket);
