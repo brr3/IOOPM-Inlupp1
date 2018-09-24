@@ -103,12 +103,12 @@ static void test_lookup_insert_3()
 static void test_lookup_remove_1()
 {
   ioopm_hash_table_t *ht = ioopm_hash_table_create();
-  for (int key = 0; key < 18; ++key)
+  for (int key = 0; key > -18; --key)
     {
       ioopm_hash_table_insert(ht, key, "abc");
       CU_ASSERT_PTR_NOT_NULL(ioopm_hash_table_lookup(ht, key));
     }
-  for (int key = 0; key < 18; ++key)
+  for (int key = 0; key > -18; --key)
     {
       ioopm_hash_table_remove(ht, key);
       CU_ASSERT_PTR_NULL(ioopm_hash_table_lookup(ht, key));
