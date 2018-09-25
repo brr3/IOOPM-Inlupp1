@@ -106,17 +106,10 @@ static void entry_destroy(entry_t *pointer)
 
 char *ioopm_hash_table_remove(ioopm_hash_table_t *ht, int key)                                               
 {                                                                                                             
-<<<<<<< HEAD
   /// Find the previous entry for key
   int bucket = key % No_Buckets;
   entry_t *temp = ht->buckets + bucket;
   entry_t *entry = find_previous_entry_for_key(temp, key);
-  
-=======
-  key = check_key(key);
-  int bucket = key % No_Buckets;
-  entry_t *entry = find_previous_entry_for_key(&ht->buckets[bucket], key);                                  
->>>>>>> 72568e20e09aef96c1a68f1148401441127cfb8b
   entry_t *next = entry->next;
                                                                                                               
   if (next != NULL && next->key == key)                                                                       
