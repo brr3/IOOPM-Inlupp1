@@ -112,6 +112,7 @@ char *ioopm_hash_table_remove(ioopm_hash_table_t *ht, int key)
       char *removed_value = next->value;
       entry->next = entry->next->next;
       entry_destroy(next);
+      entry->next = NULL;
       return removed_value;                                                                                    
     }                                                                                                         
   else                                                                                                        
