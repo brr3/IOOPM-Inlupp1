@@ -4,7 +4,7 @@
 #include <errno.h>
 #include <stdbool.h>
 #include <string.h>
-#include <CUnit/Basic.h>
+#include "CUnit/Basic.h"
 #include "hash_table.h"
 
 
@@ -117,7 +117,7 @@ static void test_lookup_remove_1()
 }
 
 
-int main(void)
+int main(int argc, char *argv[])
 {
   CU_pSuite pSuiteNW = NULL;
   

@@ -87,7 +87,7 @@ void ioopm_hash_table_insert(ioopm_hash_table_t *ht, int key, char *value)
 
 char **ioopm_hash_table_lookup(ioopm_hash_table_t *ht, int key)
 {
-  key = check_key(key);
+  //key = check_key(key); DEMO
   entry_t *entry = find_previous_entry_for_key(&ht->buckets[key % No_Buckets], key);
   entry_t *next = entry->next;
   
@@ -110,8 +110,11 @@ static void entry_destroy(entry_t *pointer)
 
 char *ioopm_hash_table_remove(ioopm_hash_table_t *ht, int key)                                               
 {                                                                                                             
-  /// Find the previous entry for key                                                                         
-  entry_t *entry = find_previous_entry_for_key(&ht->buckets[key % No_Buckets], key);                                  
+  /// Find the previous entry for key
+  int bucket = key % No_Buckets;
+  entry_t *temp = ht->buckets + bucket;
+  entry_t *entry = find_previous_entry_for_key(temp, key);
+  
   entry_t *next = entry->next;
                                                                                                               
   if (next != NULL && next->key == key)                                                                       
