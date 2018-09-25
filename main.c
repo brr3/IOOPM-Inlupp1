@@ -52,7 +52,7 @@ static void test_create_destroy()
 static void test_lookup_empty()
 {
    ioopm_hash_table_t *ht = ioopm_hash_table_create();
-   for (int i = 0; i < 18; ++i) /// 18 is a bit magical 
+   for (int i = 0; i < No_Buckets + 1; ++i) 
      {
        CU_ASSERT_PTR_NULL(ioopm_hash_table_lookup(ht, i));
      }
@@ -86,12 +86,12 @@ static void test_lookup_insert_2()
 static void test_lookup_insert_3()
 {
   ioopm_hash_table_t *ht = ioopm_hash_table_create();
-  for (int key = 0; key < 18; ++key)
+  for (int key = 0; key < No_Buckets + 1; ++key)
     {
       ioopm_hash_table_insert(ht, key, "abc");
       CU_ASSERT_PTR_NOT_NULL(ioopm_hash_table_lookup(ht, key));
     }
-  for (int key = 0; key > -36; --key)
+  for (int key = 0; key > -2 * No_Buckets; --key)
     {
       ioopm_hash_table_insert(ht, key, "cde");
       CU_ASSERT_PTR_NOT_NULL(ioopm_hash_table_lookup(ht, key));
@@ -103,12 +103,11 @@ static void test_lookup_insert_3()
 static void test_lookup_remove_1()
 {
   ioopm_hash_table_t *ht = ioopm_hash_table_create();
-  for (int key = 0; key > -18; --key)
+  for (int key = 0; key > -No_Buckets - 1; --key)
     {
       ioopm_hash_table_insert(ht, key, "abc");
-      CU_ASSERT_PTR_NOT_NULL(ioopm_hash_table_lookup(ht, key));
     }
-  for (int key = 0; key > -18; --key)
+  for (int key = 0; key > -No_Buckets - 1; --key)
     {
       ioopm_hash_table_remove(ht, key);
       CU_ASSERT_PTR_NULL(ioopm_hash_table_lookup(ht, key));
@@ -116,21 +115,50 @@ static void test_lookup_remove_1()
   ioopm_hash_table_destroy(ht);
 }
 
+
 static void test_size()
 {
   ioopm_hash_table_t *ht = ioopm_hash_table_create();
   CU_ASSERT_EQUAL(ioopm_hash_table_size(ht), 0);
-  for (int i = 0; i < 16; i++)
+  for (int i = 0; i < No_Buckets; i++)
     {
       ioopm_hash_table_insert(ht, i, "abc");
-      
     }
-  CU_ASSERT_EQUAL(ioopm_hash_table_size(ht), 16);
-  for (int i = 0; i < 16; i++)
+  CU_ASSERT_EQUAL(ioopm_hash_table_size(ht), No_Buckets);
+  for (int i = 0; i < No_Buckets; i++)
     {
-      ioopm_hash_table_insert(ht, i*17, "abc");
+      ioopm_hash_table_insert(ht, i*No_Buckets, "abc");
     }
-  CU_ASSERT_EQUAL(ioopm_hash_table_size(ht), 31); //Endast 31 då vi redan haft en entry med key = 0.
+  CU_ASSERT_EQUAL(ioopm_hash_table_size(ht), 33); //Endast No_Buckets * 2 - 1 då vi redan haft en entry med key = 0.
+  ioopm_hash_table_destroy(ht);
+}
+
+
+static void test_is_empty()
+{
+  ioopm_hash_table_t *ht = ioopm_hash_table_create();
+  CU_ASSERT_TRUE(ioopm_hash_table_is_empty(ht));
+  ioopm_hash_table_insert(ht, 0, "abc");
+  CU_ASSERT_FALSE(ioopm_hash_table_is_empty(ht));
+  ioopm_hash_table_remove(ht, 0);
+  CU_ASSERT_TRUE(ioopm_hash_table_is_empty(ht));
+  ioopm_hash_table_insert(ht, No_Buckets, "abc");
+  CU_ASSERT_FALSE(ioopm_hash_table_is_empty(ht));
+  ioopm_hash_table_destroy(ht);
+}
+
+
+static void test_clear()
+{
+  ioopm_hash_table_t *ht = ioopm_hash_table_create();
+  for (int i = 0; i < No_Buckets; i++)
+    {
+      ioopm_hash_table_insert(ht, i, "abc");
+    }
+  CU_ASSERT_FALSE(ioopm_hash_table_is_empty(ht));
+  ioopm_hash_table_clear(ht);
+  CU_ASSERT_TRUE(ioopm_hash_table_is_empty(ht));
+  ioopm_hash_table_destroy(ht);
 }
 
 
@@ -154,7 +182,9 @@ int main(void)
       (NULL == CU_add_test(pSuiteNW, "test of lookup: insert_2", test_lookup_insert_2)) ||
       (NULL == CU_add_test(pSuiteNW, "test of lookup: insert_3", test_lookup_insert_3)) ||
       (NULL == CU_add_test(pSuiteNW, "test of lookup: remove_1", test_lookup_remove_1)) ||
-      (NULL == CU_add_test(pSuiteNW, "test of size: size", test_size))) {
+      (NULL == CU_add_test(pSuiteNW, "test of size", test_size)) ||
+      (NULL == CU_add_test(pSuiteNW, "test of is_empty", test_is_empty)) ||
+      (NULL == CU_add_test(pSuiteNW, "test of clear", test_clear))) {
     CU_cleanup_registry();
     return CU_get_error();
   }
