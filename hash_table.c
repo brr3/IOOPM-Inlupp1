@@ -181,3 +181,46 @@ bool ioopm_hash_table_is_empty(ioopm_hash_table_t *ht)
     }
   return true;
 }
+
+
+int *ioopm_hash_table_keys(ioopm_hash_table_t *ht)
+{
+  size_t ht_size = ioopm_hash_table_size(ht);
+  int *keys = calloc(1, sizeof(int) * ht_size);
+  int n = 0;
+
+  for (int i = 0; i < No_Buckets; ++i)
+    {
+      entry_t *temp = &ht->buckets[i];
+      entry_t *next = temp->next;
+      while (next != NULL && (size_t) n < ht_size)
+        {
+          keys[n] = next->key;
+          next = next->next;
+          ++n;
+        }
+    }
+  return keys;
+}
+
+
+char **ioopm_hash_table_values(ioopm_hash_table_t *ht)
+{
+  size_t ht_size = ioopm_hash_table_size(ht);
+  char **values = calloc(1, sizeof(char*) * ht_size);
+  int n = 0;
+
+  for (int i = 0; i < No_Buckets; ++i)
+    {
+      entry_t *temp = &ht->buckets[i];
+      entry_t *next = temp->next;
+      while (next != NULL && (size_t) n < ht_size) // Kan optimeras, se 5.2.1
+        {
+          values[n] = next->value;
+          next = next->next;
+          ++n;
+        }
+    }
+  values[n] = NULL;
+  return values;
+}

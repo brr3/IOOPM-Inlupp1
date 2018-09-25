@@ -162,6 +162,40 @@ static void test_clear()
 }
 
 
+static void test_keys()
+{
+  ioopm_hash_table_t *ht = ioopm_hash_table_create();
+  for (int i = 0; i < No_Buckets; i++)
+    {
+      ioopm_hash_table_insert(ht, i, "abc");
+    }
+  int *keys = ioopm_hash_table_keys(ht);
+  for (int i = 0; (size_t) i < ioopm_hash_table_size(ht); ++i)
+    {
+      CU_ASSERT_TRUE(keys[i] == i);
+    }
+  free(keys);
+  ioopm_hash_table_destroy(ht);
+}
+
+
+static void test_values()
+{
+  ioopm_hash_table_t *ht = ioopm_hash_table_create();
+  for (int i = 0; i < No_Buckets; i++)
+    {
+      ioopm_hash_table_insert(ht, i, "abc");
+    }
+  char **values = ioopm_hash_table_values(ht);
+  for (int i = 0; (size_t) i < ioopm_hash_table_size(ht); ++i)
+    {
+      CU_ASSERT_TRUE(strcmp(values[i], "abc") == 0);
+    }
+  free(values);
+  ioopm_hash_table_destroy(ht);
+}
+
+
 int main(void)
 {
   CU_pSuite pSuiteNW = NULL;
@@ -184,7 +218,9 @@ int main(void)
       (NULL == CU_add_test(pSuiteNW, "test of lookup: remove_1", test_lookup_remove_1)) ||
       (NULL == CU_add_test(pSuiteNW, "test of size", test_size)) ||
       (NULL == CU_add_test(pSuiteNW, "test of is_empty", test_is_empty)) ||
-      (NULL == CU_add_test(pSuiteNW, "test of clear", test_clear))) {
+      (NULL == CU_add_test(pSuiteNW, "test of clear", test_clear)) ||
+      (NULL == CU_add_test(pSuiteNW, "test of keys", test_keys)) ||
+      (NULL == CU_add_test(pSuiteNW, "test of values", test_values))) {
     CU_cleanup_registry();
     return CU_get_error();
   }
