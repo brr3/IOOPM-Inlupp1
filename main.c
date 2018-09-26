@@ -116,6 +116,23 @@ static void test_lookup_remove_1()
   ioopm_hash_table_destroy(ht);
 }
 
+static void test_size()
+{
+  ioopm_hash_table_t *ht = ioopm_hash_table_create();
+  CU_ASSERT_EQUAL(ioopm_hash_table_size(ht), 0);
+  for (int i = 0; i < 16; i++)
+    {
+      ioopm_hash_table_insert(ht, i, "abc");
+      
+    }
+  CU_ASSERT_EQUAL(ioopm_hash_table_size(ht), 16);
+  for (int i = 0; i < 16; i++)
+    {
+      ioopm_hash_table_insert(ht, i*17, "abc");
+    }
+  CU_ASSERT_EQUAL(ioopm_hash_table_size(ht), 31); //Endast 31 då vi redan haft en entry med key = 0.
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -136,7 +153,8 @@ int main(int argc, char *argv[])
       (NULL == CU_add_test(pSuiteNW, "test of lookup: insert_1", test_lookup_insert_1)) ||
       (NULL == CU_add_test(pSuiteNW, "test of lookup: insert_2", test_lookup_insert_2)) ||
       (NULL == CU_add_test(pSuiteNW, "test of lookup: insert_3", test_lookup_insert_3)) ||
-      (NULL == CU_add_test(pSuiteNW, "test of lookup: remove_1", test_lookup_remove_1))) {
+      (NULL == CU_add_test(pSuiteNW, "test of lookup: remove_1", test_lookup_remove_1)) ||
+      (NULL == CU_add_test(pSuiteNW, "test of size: size", test_size))) {
     CU_cleanup_registry();
     return CU_get_error();
   }
@@ -146,3 +164,4 @@ int main(int argc, char *argv[])
   CU_cleanup_registry();
   return CU_get_error();
 }
+
