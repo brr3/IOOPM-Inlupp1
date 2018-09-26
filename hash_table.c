@@ -30,6 +30,7 @@ static entry_t *find_previous_entry_for_key(entry_t *address, int key)
 }
 
 
+/*
 static entry_t *find_previous_entry_for_key_r(entry_t *first_entry, entry_t *next_entry, entry_t *previous_entry, int key)
 {
   if (next_entry != NULL)
@@ -43,7 +44,7 @@ static entry_t *find_previous_entry_for_key_r(entry_t *first_entry, entry_t *nex
         }
     }
   return first_entry; 
-}
+}*/
 
 
 static entry_t *entry_create(int key, char *value, entry_t *next)
@@ -78,8 +79,7 @@ void ioopm_hash_table_insert(ioopm_hash_table_t *ht, int key, char *value)
 {
   key = check_key(key);
   int bucket = key % No_Buckets;
-  entry_t *list_address = &ht->buckets[bucket];
-  entry_t *entry = find_previous_entry_for_key_r(list_address, list_address->next, list_address, key);
+  entry_t *entry = find_previous_entry_for_key(&ht->buckets[bucket], key);
   entry_t *next = entry->next;
 
   if (next != NULL && next->key == key)
