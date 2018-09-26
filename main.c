@@ -55,9 +55,12 @@ static void test_lookup_empty()
    for (int i = 0; i < No_Buckets + 1; ++i) 
      {
        CU_ASSERT_PTR_NULL(ioopm_hash_table_lookup(ht, i));
+       CU_ASSERT_FALSE(ioopm_hash_table_has_key(ht, i));
      }
    CU_ASSERT_PTR_NULL(ioopm_hash_table_lookup(ht, -1));
+   CU_ASSERT_FALSE(ioopm_hash_table_has_key(ht, -1));
    CU_ASSERT_PTR_NULL(ioopm_hash_table_lookup(ht, -18));
+   CU_ASSERT_FALSE(ioopm_hash_table_has_key(ht, -18));
    ioopm_hash_table_destroy(ht);
 }
 
@@ -90,11 +93,13 @@ static void test_lookup_insert_3()
     {
       ioopm_hash_table_insert(ht, key, "abc");
       CU_ASSERT_PTR_NOT_NULL(ioopm_hash_table_lookup(ht, key));
+      CU_ASSERT_TRUE(ioopm_hash_table_has_key(ht, key));
     }
   for (int key = 0; key > -2 * No_Buckets; --key)
     {
       ioopm_hash_table_insert(ht, key, "cde");
       CU_ASSERT_PTR_NOT_NULL(ioopm_hash_table_lookup(ht, key));
+      CU_ASSERT_TRUE(ioopm_hash_table_has_key(ht, key));
     }
   ioopm_hash_table_destroy(ht);
 }
@@ -196,6 +201,22 @@ static void test_values()
 }
 
 
+static void test_has_value()
+{
+  ioopm_hash_table_t *ht = ioopm_hash_table_create();
+  char *string1 = "abc";
+  char *string2 = "def";
+  ioopm_hash_table_insert(ht, 0, string1);
+  ioopm_hash_table_insert(ht, 16, string2);
+  char *copy = strdup(string1);
+  CU_ASSERT_TRUE(ioopm_hash_table_has_value(ht, copy));
+  CU_ASSERT_TRUE(ioopm_hash_table_has_value(ht, string2));
+  CU_ASSERT_FALSE(ioopm_hash_table_has_value(ht, "ghi"));
+  free(copy);
+  ioopm_hash_table_destroy(ht);
+}
+
+
 int main(void)
 {
   CU_pSuite pSuiteNW = NULL;
@@ -220,7 +241,8 @@ int main(void)
       (NULL == CU_add_test(pSuiteNW, "test of is_empty", test_is_empty)) ||
       (NULL == CU_add_test(pSuiteNW, "test of clear", test_clear)) ||
       (NULL == CU_add_test(pSuiteNW, "test of keys", test_keys)) ||
-      (NULL == CU_add_test(pSuiteNW, "test of values", test_values))) {
+      (NULL == CU_add_test(pSuiteNW, "test of values", test_values)) ||
+      (NULL == CU_add_test(pSuiteNW, "test of has_value", test_has_value))) {
     CU_cleanup_registry();
     return CU_get_error();
   }

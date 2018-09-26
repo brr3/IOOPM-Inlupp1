@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "hash_table.h"
 
 
@@ -90,6 +91,40 @@ char **ioopm_hash_table_lookup(ioopm_hash_table_t *ht, int key)
     {
       return NULL; 
     }
+}
+
+
+bool ioopm_hash_table_has_key(ioopm_hash_table_t *ht, int key)
+{
+  char **value_ptr = ioopm_hash_table_lookup(ht, key);
+  if (value_ptr == NULL)
+    {
+      return false;
+    } else
+    {
+      return true;
+    }
+}
+
+
+bool ioopm_hash_table_has_value(ioopm_hash_table_t *ht, char *value)
+{
+  entry_t *entry, *next;
+
+  for (int i = 0; i < No_Buckets; ++i)
+    {
+      entry = &ht->buckets[i];
+      next = entry->next;
+      while (next != NULL)
+        {
+          if (strcmp(next->value, value) == 0)
+            {
+              return true;
+            }
+          next = next->next;
+        }
+    }
+  return false;
 }
 
 
@@ -193,7 +228,7 @@ int *ioopm_hash_table_keys(ioopm_hash_table_t *ht)
     {
       entry_t *temp = &ht->buckets[i];
       entry_t *next = temp->next;
-      while (next != NULL && (size_t) n < ht_size)
+      while (next != NULL)
         {
           keys[n] = next->key;
           next = next->next;
@@ -214,13 +249,13 @@ char **ioopm_hash_table_values(ioopm_hash_table_t *ht)
     {
       entry_t *temp = &ht->buckets[i];
       entry_t *next = temp->next;
-      while (next != NULL && (size_t) n < ht_size) // Kan optimeras, se 5.2.1
+      while (next != NULL) // Kan optimeras, se 5.2.1
         {
           values[n] = next->value;
           next = next->next;
           ++n;
         }
     }
-  values[n] = NULL;
+  //values[n] = NULL;
   return values;
 }
