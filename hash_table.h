@@ -9,7 +9,6 @@ typedef bool(*ioopm_apply_function)(int key, char *value, void *extra);
 
 #define No_Buckets 17
 
-
 struct entry
 {
   int key;       // holds the key

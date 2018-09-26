@@ -30,6 +30,22 @@ static entry_t *find_previous_entry_for_key(entry_t *address, int key)
 }
 
 
+static entry_t *find_previous_entry_for_key_r(entry_t *first_entry, entry_t *next_entry, entry_t *previous_entry, int key)
+{
+  if (next_entry != NULL)
+    {
+      if (next_entry->key == key)
+        {
+          return previous_entry;
+        } else
+        {
+          find_previous_entry_for_key_r(first_entry, next_entry->next, next_entry, key);
+        }
+    }
+  return first_entry; 
+}
+
+
 static entry_t *entry_create(int key, char *value, entry_t *next)
 {
   entry_t *new_entry = calloc(1, sizeof(entry_t));
@@ -62,7 +78,8 @@ void ioopm_hash_table_insert(ioopm_hash_table_t *ht, int key, char *value)
 {
   key = check_key(key);
   int bucket = key % No_Buckets;
-  entry_t *entry = find_previous_entry_for_key(&ht->buckets[bucket], key);
+  entry_t *list_address = &ht->buckets[bucket];
+  entry_t *entry = find_previous_entry_for_key_r(list_address, list_address->next, list_address, key);
   entry_t *next = entry->next;
 
   if (next != NULL && next->key == key)
@@ -175,7 +192,7 @@ void ioopm_hash_table_clear(ioopm_hash_table_t *ht)
           first_entry->next = NULL;
         }
     }
-}
+} 
 
 
 void ioopm_hash_table_destroy(ioopm_hash_table_t *ht)
@@ -186,6 +203,43 @@ void ioopm_hash_table_destroy(ioopm_hash_table_t *ht)
 }
 
 
+size_t ioopm_hash_table_size_sr(ioopm_hash_table_t *ht, entry_t *temp, int counter, int i) // SVANSREKURSION
+{
+  if (i >= No_Buckets)
+    {
+      return (size_t) counter;
+    } else if (temp->next != NULL)
+    {
+      return ioopm_hash_table_size_sr(ht, temp->next, counter + 1, i);
+    } else
+    {
+      return ioopm_hash_table_size_sr(ht, &ht->buckets[i + 1], counter, i + 1);
+    }
+}
+
+
+size_t ioopm_hash_table_size_r(ioopm_hash_table_t *ht, entry_t *temp, int counter, int i) // REKURSION, EJ FÄRDIG
+{
+  if (i >= No_Buckets)
+    {
+      return (size_t) counter;
+    } else if (temp->next != NULL)
+    {
+      return ioopm_hash_table_size_sr(ht, temp->next, counter + 1, i);
+    } else
+    {
+      return ioopm_hash_table_size_sr(ht, &ht->buckets[i + 1], counter, i + 1);
+    }
+}
+
+
+size_t ioopm_hash_table_size(ioopm_hash_table_t *ht) // ACHIEVEMENT F13/F14 DEMO
+{
+  return ioopm_hash_table_size_sr(ht, &ht->buckets[0], 0, 0);
+}
+
+
+/* 
 size_t ioopm_hash_table_size(ioopm_hash_table_t *ht)
 {
   int counter = 0;
@@ -199,7 +253,7 @@ size_t ioopm_hash_table_size(ioopm_hash_table_t *ht)
         }        
     }
   return (size_t) counter;
-}
+} */
 
 
 bool ioopm_hash_table_is_empty(ioopm_hash_table_t *ht)
