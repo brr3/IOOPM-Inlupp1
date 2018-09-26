@@ -205,7 +205,7 @@ int *ioopm_hash_table_keys(ioopm_hash_table_t *ht)
 char **ioopm_hash_table_values(ioopm_hash_table_t *ht)
 {
   size_t ht_size = ioopm_hash_table_size(ht);
-  char **values = calloc(1, sizeof(char*) * ht_size);
+  char **values = calloc(ht_size, sizeof(char*) + 1); // +1 for string terminator NULL
   int n = 0;
 
   for (int i = 0; i < No_Buckets; ++i)
@@ -223,3 +223,53 @@ char **ioopm_hash_table_values(ioopm_hash_table_t *ht)
   return values;
 }
 
+
+bool ioopm_hash_table_all(ioopm_hash_table_t *h, ioopm_apply_function pred, void *arg)
+{
+  int size = ioopm_hash_table_size(h);
+  int *keys = ioopm_hash_table_keys(h);
+  char **values = ioopm_hash_table_values(h);
+  bool result = true;
+  
+  for (int i = 0; i < size && result; i++)
+    {
+      result = result && pred(keys[i], values[i], arg);
+    }
+  free(keys);
+  free(values);
+  return result;  
+}
+
+bool ioopm_hash_table_any(ioopm_hash_table_t *h, ioopm_apply_function pred, void *arg)
+{
+  int size = ioopm_hash_table_size(h);
+  int *keys = ioopm_hash_table_keys(h);
+  char **values = ioopm_hash_table_values(h);
+  for (int i = 0; i < size; i++)
+    {
+      if (pred(keys[i], values[i], arg))
+        {
+          free(keys);
+          free(values);
+          return true;
+        }
+    }
+  free(keys);
+  free(values);
+  return false;
+}
+
+void ioopm_hash_table_apply_to_all(ioopm_hash_table_t *h, ioopm_apply_function apply_fun, void *arg)
+{
+  int size = ioopm_hash_table_size(h);
+  int *keys = ioopm_hash_table_keys(h);
+  char **values = ioopm_hash_table_values(h);
+  
+  for (int i = 0; i < size; i++)
+    {
+      apply_fun(keys[i], values[i], arg);
+    }
+  free(keys);
+  free(values);
+  return;
+}

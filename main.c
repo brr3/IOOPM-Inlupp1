@@ -4,6 +4,7 @@
 #include <errno.h>
 #include <stdbool.h>
 #include <string.h>
+#include <ctype.h>
 #include "CUnit/Basic.h"
 #include "hash_table.h"
 
@@ -195,6 +196,60 @@ static void test_values()
   ioopm_hash_table_destroy(ht);
 }
 
+static bool comp_value(int key, char *value, void *extra)
+{
+  return strcmp(value, (char *)extra) == 0;
+}
+
+static void test_all()
+{
+  ioopm_hash_table_t *ht = ioopm_hash_table_create();
+  char *test_value = "abc";
+  for (int i = 0; i < No_Buckets; i++)
+    {
+      ioopm_hash_table_insert(ht, i, test_value);
+    }
+  CU_ASSERT_TRUE(ioopm_hash_table_all(ht, comp_value, (void *)test_value));
+  ioopm_hash_table_destroy(ht);
+}
+
+static bool comp_key(int key, char *value, void *extra)
+{
+  return key == *((int *)extra);
+}
+
+static void test_any()
+{
+  ioopm_hash_table_t *ht = ioopm_hash_table_create();
+  int key = 42;
+  for (int i = 0; i < No_Buckets; i++)
+    {
+      ioopm_hash_table_insert(ht, i, "abc");
+    }
+  ioopm_hash_table_insert(ht, key, "abc");
+  CU_ASSERT_TRUE(ioopm_hash_table_any(ht, comp_key, (void *) &key));
+  ioopm_hash_table_destroy(ht);
+}
+
+static bool value_count(int key, char *value, void *result)
+{
+  *(int *)result += strlen(value);
+  return true;
+}
+
+static void test_apply_all()
+{
+  ioopm_hash_table_t *ht = ioopm_hash_table_create();
+  for (int i = 0; i < No_Buckets; i++)
+    {
+      ioopm_hash_table_insert(ht, i, "abc");
+    }
+  int result = 0;
+  ioopm_hash_table_apply_to_all(ht, value_count, &result);
+  CU_ASSERT_TRUE(result == 3*No_Buckets);
+
+  ioopm_hash_table_destroy(ht);
+}
 
 int main(int argc, char *argv[])
 {
@@ -220,7 +275,11 @@ int main(int argc, char *argv[])
       (NULL == CU_add_test(pSuiteNW, "test of is_empty", test_is_empty)) ||
       (NULL == CU_add_test(pSuiteNW, "test of clear", test_clear)) ||
       (NULL == CU_add_test(pSuiteNW, "test of keys", test_keys)) ||
-      (NULL == CU_add_test(pSuiteNW, "test of values", test_values))) {
+      (NULL == CU_add_test(pSuiteNW, "test of values", test_values)) ||
+      (NULL == CU_add_test(pSuiteNW, "test of any", test_any)) ||
+      (NULL == CU_add_test(pSuiteNW, "test of all", test_all)) ||
+      (NULL == CU_add_test(pSuiteNW, "test of apply to all", test_apply_all)) 
+      ) {
     CU_cleanup_registry();
     return CU_get_error();
   }
