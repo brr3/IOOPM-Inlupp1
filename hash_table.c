@@ -325,7 +325,7 @@ char **ioopm_hash_table_values(ioopm_hash_table_t *ht)
           ++n;
         }
     }
-  //values[n] = NULL;
+  values[n] = NULL;
   return values;
 }
 
