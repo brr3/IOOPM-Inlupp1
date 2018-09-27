@@ -59,7 +59,19 @@ static entry_t *entry_create(int key, char *value, entry_t *next)
 }
 
 
-int check_key(int key)
+static void check_key_(int *key) // DEMO ACHIEVEMENT M38: värdeöverföring via pekare
+{
+  if (*key < 0)
+    {
+      while (*key < 0)
+        {
+          *key = No_Buckets + *key;
+        }
+    }
+}
+
+
+static int check_key(int key)
 {
   if (key < 0)
     {
@@ -77,7 +89,7 @@ int check_key(int key)
 
 void ioopm_hash_table_insert(ioopm_hash_table_t *ht, int key, char *value)
 {
-  key = check_key(key);
+  check_key_(&key);
   int bucket = key % No_Buckets;
   entry_t *entry = find_previous_entry_for_key(&ht->buckets[bucket], key);
   entry_t *next = entry->next;
@@ -151,7 +163,8 @@ static void entry_destroy(entry_t *pointer)
 }
 
 
-char *ioopm_hash_table_remove(ioopm_hash_table_t *ht, int key)  {
+char *ioopm_hash_table_remove(ioopm_hash_table_t *ht, int key)
+{
   key = check_key(key);
   int bucket = key % No_Buckets;
   entry_t *entry = find_previous_entry_for_key(&ht->buckets[bucket], key);
@@ -160,9 +173,11 @@ char *ioopm_hash_table_remove(ioopm_hash_table_t *ht, int key)  {
   if (next != NULL && next->key == key)                                                                       
     {
       char *removed_value = next->value;
+      
       entry->next = entry->next->next;
       entry_destroy(next);
       entry->next = NULL;
+      
       return removed_value;                                                                                    
     }                                                                                                         
   else                                                                                                        
@@ -178,10 +193,12 @@ void ioopm_hash_table_clear(ioopm_hash_table_t *ht)
     {
       entry_t *first_entry = &ht->buckets[bucket];
       entry_t *entry, *next;
+      
       if (first_entry->next != NULL)
         {
           entry = first_entry->next;
           next = entry->next;
+          
           while (next != NULL)
             {
               entry_destroy(entry);
@@ -203,7 +220,7 @@ void ioopm_hash_table_destroy(ioopm_hash_table_t *ht)
 }
 
 
-size_t ioopm_hash_table_size_sr(ioopm_hash_table_t *ht, entry_t *temp, int counter, int i) // SVANSREKURSION
+size_t ioopm_hash_table_size_sr(ioopm_hash_table_t *ht, entry_t *temp, int counter, int i) // SVANSREKURSION F14
 {
   if (i >= No_Buckets)
     {
@@ -240,7 +257,7 @@ size_t ioopm_hash_table_size(ioopm_hash_table_t *ht) // ACHIEVEMENT F13/F14 DEMO
 
 
 /* 
-size_t ioopm_hash_table_size(ioopm_hash_table_t *ht)
+size_t ioopm_hash_table_size(ioopm_hash_table_t *ht) // ITERATIV LÖSNING
 {
   int counter = 0;
   for (int i = 0; i < No_Buckets; i++)
