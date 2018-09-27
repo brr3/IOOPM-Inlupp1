@@ -1,6 +1,6 @@
 #pragma once
 #include <stdbool.h>
-
+#include <stdlib.h>
 
 typedef struct entry entry_t;
 typedef struct hash_table ioopm_hash_table_t;
