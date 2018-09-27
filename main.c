@@ -7,6 +7,7 @@
 #include <ctype.h>
 #include "CUnit/Basic.h"
 #include "hash_table.h"
+#include "linked_list.h"
 
 
 int init_suite(void)
@@ -21,7 +22,7 @@ int clean_suite(void)
 
 
 /*
-static bool test_lookup(ioopm_hash_table_t *ht, int key)
+static bool test_lookup(ioopm_hash_table_t *ht, int key) //DEMO M39 **
 {
   char **value_ptr = ioopm_hash_table_lookup(ht, key);
   char *value = NULL; // no value yet
@@ -40,7 +41,6 @@ static bool test_lookup(ioopm_hash_table_t *ht, int key)
     }
 }
 */
-
 
 static void test_create_destroy()
 {
@@ -223,6 +223,15 @@ static bool comp_key(int key, char *value, void *extra)
   return key == *((int *)extra);
 }
 
+static bool any_length_4(int key, char *value, void *arg)
+{
+  if (strlen(value) == 4)
+    {
+      return true;
+    }
+  return false;
+}
+
 static void test_any()
 {
   ioopm_hash_table_t *ht = ioopm_hash_table_create();
@@ -231,8 +240,16 @@ static void test_any()
     {
       ioopm_hash_table_insert(ht, i, "abc");
     }
+  CU_ASSERT_FALSE(ioopm_hash_table_any(ht, comp_key, (void *) &key));
+  
   ioopm_hash_table_insert(ht, key, "abc");
   CU_ASSERT_TRUE(ioopm_hash_table_any(ht, comp_key, (void *) &key));
+
+  void *dummy = NULL;
+  CU_ASSERT_FALSE(ioopm_hash_table_any(ht, any_length_4, dummy));
+  ioopm_hash_table_insert(ht, 500, "abcd");
+  CU_ASSERT_TRUE(ioopm_hash_table_any(ht, any_length_4, dummy));
+  
   ioopm_hash_table_destroy(ht);
 }
 

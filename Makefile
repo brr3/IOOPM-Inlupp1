@@ -1,8 +1,16 @@
+COMPILER = gcc
+OPTIONS = -g -Wall -pedantic
+LINKOPTIONS = -lcunit
+
+
 hash_table.o: hash_table.c hash_table.h
-	gcc -g -c -Wall hash_table.c
+	$(COMPILER) $(OPTIONS) -c hash_table.c hash_table.h $(LINKOPTIONS)	
 
 main: hash_table.o main.c
-	gcc -g hash_table.o main.c -o main -lcunit
+	$(COMPILER) $(OPTIONS) -c hash_table.o main.c -o main $(LINKOPTIONS) 
+
+linked_list.o: linked_list.c linked_list.h
+	$(COMPILER) $(OPTIONS) -c linked_list.c linked_list.h $(LINKOPTIONS)
 
 memtest: main
-	valgrind --leak-check=full ./main
+	valgrind --leak-check=full ./main;

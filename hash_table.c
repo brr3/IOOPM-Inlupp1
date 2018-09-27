@@ -175,24 +175,7 @@ static size_t ioopm_hash_table_size_sr(ioopm_hash_table_t *ht, entry_t *temp, in
 }
 
 
-static size_t ioopm_hash_table_size_r(ioopm_hash_table_t *ht, entry_t *temp, int counter, int i) // REKURSION F13
-{
-  if (i >= No_Buckets)
-    {
-      return (size_t) counter;
-    }
-  else if (temp->next != NULL)
-    {
-      counter = ioopm_hash_table_size_r(ht, temp->next, counter, i) + 1;
-      return (size_t) counter;
-    } else
-    {
-      return ioopm_hash_table_size_r(ht, &ht->buckets[i + 1], counter, i + 1);
-    }
-}
-
-
-size_t ioopm_hash_table_size(ioopm_hash_table_t *ht) // ACHIEVEMENT F13/F14 DEMO
+size_t ioopm_hash_table_size(ioopm_hash_table_t *ht) // ACHIEVEMENT F14 DEMO
 {
   return ioopm_hash_table_size_sr(ht, &ht->buckets[0], 0, 0);
 }
@@ -296,7 +279,7 @@ char **ioopm_hash_table_values(ioopm_hash_table_t *ht)
 }
 
 
-
+//kan implementeras m.h.a hash_table_apply_to_all
 bool ioopm_hash_table_has_key(ioopm_hash_table_t *ht, int key)
 {
   char **value_ptr = ioopm_hash_table_lookup(ht, key);
@@ -309,7 +292,7 @@ bool ioopm_hash_table_has_key(ioopm_hash_table_t *ht, int key)
     }
 }
 
-
+//kan implementeras m.h.a hash_table_apply_to_all
 bool ioopm_hash_table_has_value(ioopm_hash_table_t *ht, char *value)
 {
   entry_t *entry, *next;
@@ -330,9 +313,10 @@ bool ioopm_hash_table_has_value(ioopm_hash_table_t *ht, char *value)
   return false;
 }
 
-
+//kan implementeras m.h.a hash_table_apply_to_all
 bool ioopm_hash_table_all(ioopm_hash_table_t *h, ioopm_apply_function pred, void *arg)
 {
+  //Behöver optimiseras
   int size = ioopm_hash_table_size(h);
   int *keys = ioopm_hash_table_keys(h);
   char **values = ioopm_hash_table_values(h);
@@ -347,9 +331,10 @@ bool ioopm_hash_table_all(ioopm_hash_table_t *h, ioopm_apply_function pred, void
   return result;  
 }
 
-
+//kan implementeras m.h.a hash_table_apply_to_all
 bool ioopm_hash_table_any(ioopm_hash_table_t *h, ioopm_apply_function pred, void *arg)
 {
+  //Behöver optimiseras
   int size = ioopm_hash_table_size(h);
   int *keys = ioopm_hash_table_keys(h);
   char **values = ioopm_hash_table_values(h);
@@ -367,9 +352,9 @@ bool ioopm_hash_table_any(ioopm_hash_table_t *h, ioopm_apply_function pred, void
   return false;
 }
 
-
 void ioopm_hash_table_apply_to_all(ioopm_hash_table_t *h, ioopm_apply_function apply_fun, void *arg)
 {
+  //Behöver optimiseras
   int size = ioopm_hash_table_size(h);
   int *keys = ioopm_hash_table_keys(h);
   char **values = ioopm_hash_table_values(h);
