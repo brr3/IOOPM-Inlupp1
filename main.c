@@ -133,9 +133,9 @@ static void test_size()
   CU_ASSERT_EQUAL(ioopm_hash_table_size(ht), No_Buckets);
   for (int i = 0; i < No_Buckets; i++)
     {
-      ioopm_hash_table_insert(ht, i*No_Buckets, "abc");
+      ioopm_hash_table_insert(ht, i+No_Buckets, "abc");
     }
-  CU_ASSERT_EQUAL(ioopm_hash_table_size(ht), 33); //Endast No_Buckets * 2 - 1 då vi redan haft en entry med key = 0.
+  CU_ASSERT_EQUAL(ioopm_hash_table_size(ht), No_Buckets * 2);
   ioopm_hash_table_destroy(ht);
 }
 
