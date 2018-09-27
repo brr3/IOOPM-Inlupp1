@@ -9,18 +9,6 @@ typedef bool(*ioopm_apply_function)(int key, char *value, void *extra);
 
 #define No_Buckets 17
 
-struct entry
-{
-  int key;       // holds the key
-  char *value;   // holds the value
-  entry_t *next; // points to the next entry (possibly NULL)
-};
-
-struct hash_table
-{
-  entry_t buckets[No_Buckets];
-};
-
 
 /// @brief Create a new hash table
 /// @return A new empty hash table
