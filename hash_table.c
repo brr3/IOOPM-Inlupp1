@@ -160,7 +160,7 @@ void ioopm_hash_table_destroy(ioopm_hash_table_t *ht)
 }
 
 
-static size_t ioopm_hash_table_size_sr(ioopm_hash_table_t *ht, entry_t *temp, int counter, int i) // SVANSREKURSION F14
+static size_t ioopm_hash_table_size_sr(ioopm_hash_table_t *ht, entry_t *temp, int counter, int i)
 {
   if (i >= No_Buckets)
     {
@@ -175,6 +175,7 @@ static size_t ioopm_hash_table_size_sr(ioopm_hash_table_t *ht, entry_t *temp, in
 }
 
 
+/*
 static size_t ioopm_hash_table_size_r(ioopm_hash_table_t *ht, entry_t *temp, int counter, int i) // REKURSION F13
 {
   if (i >= No_Buckets)
@@ -189,16 +190,16 @@ static size_t ioopm_hash_table_size_r(ioopm_hash_table_t *ht, entry_t *temp, int
     {
       return ioopm_hash_table_size_r(ht, &ht->buckets[i + 1], counter, i + 1);
     }
-}
+} */
 
 
-size_t ioopm_hash_table_size(ioopm_hash_table_t *ht) // ACHIEVEMENT F13/F14 DEMO
+size_t ioopm_hash_table_size(ioopm_hash_table_t *ht)
 {
   return ioopm_hash_table_size_sr(ht, &ht->buckets[0], 0, 0);
 }
 
  
-size_t ioopm_hash_table_size_i(ioopm_hash_table_t *ht) // ITERATIV LÖSNING
+size_t ioopm_hash_table_size_i(ioopm_hash_table_t *ht)
 {
   int counter = 0;
   for (int i = 0; i < No_Buckets; i++)
