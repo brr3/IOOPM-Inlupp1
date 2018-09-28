@@ -14,7 +14,7 @@ struct list
 
 struct node
 {
-  int *data; // Vi börjar med int och kan generalisera senare till void
+  int data; // Vi börjar med int och kan generalisera senare till void*
   node_t *next;
 };
 
@@ -61,7 +61,7 @@ static node_t *link_new(int value, node_t *next)
 
   if (new_node)
     {
-      new_node->data = &value;
+      new_node->data = value;
       new_node->next = next;
     }
 
@@ -90,21 +90,19 @@ void ioopm_linked_list_prepend(ioopm_list_t *list, int value)
 static node_t *list_inner_find_previous(node_t *first_node, int index)
 {
   node_t *previous_node = first_node;
-
   for (int i = 0; i < index; ++i)
     {
       previous_node = previous_node->next;
     }
-
   return previous_node;
 }
 
 
 static int list_inner_adjust_index(int index, int upper_bound)
 {
-  if (abs(index) > upper_bound)
+  if (abs(index) >= upper_bound)
     {
-      index = upper_bound;
+      index = upper_bound - 1;
       return index;
     }
   return abs(index);
@@ -118,6 +116,7 @@ void ioopm_linked_list_insert(ioopm_list_t *list, int index, int value)
   int valid_index = list_inner_adjust_index(index, list_size + 1);
 
   node_t *previous_node;
+  
   if (valid_index < list_size) {
     previous_node = list_inner_find_previous(list->first, valid_index);  
   }
@@ -141,7 +140,7 @@ int ioopm_linked_list_remove(ioopm_list_t *list, int index)
   node_t *previous_node = list_inner_find_previous(list->first, valid_index);
 
   node_t *to_remove = previous_node->next;
-  int removed_value = *to_remove->data;
+  int removed_value = to_remove->data;
   previous_node->next = to_remove->next;
 
   free(to_remove);                   
@@ -157,17 +156,10 @@ int ioopm_linked_list_get(ioopm_list_t *list, int index)
 {
   int list_size = ioopm_linked_list_size(list);
   int valid_index = list_inner_adjust_index(index, list_size);
-
+  
   node_t *previous_node = list_inner_find_previous(list->first, valid_index);
-
-  if (previous_node->next != NULL)
-    {
-      return *previous_node->next->data;
-    }
-  else
-    {
-      return *previous_node->data;
-    }
+  
+  return previous_node->next->data;
 }
 
 
@@ -180,9 +172,9 @@ static int compare_int_elements(int a, int b)
 // PRE: list != NULL
 bool ioopm_linked_list_contains(ioopm_list_t *list, int value)
 {
-  for (node_t *cursor = list->first->next; cursor; cursor = cursor->next)
+  for (node_t *cursor = list->first->next; cursor != NULL; cursor = cursor->next)
     {
-      if (compare_int_elements(*cursor->data, value) == 0) return true; // compare_int_elements förbereder generalisering
+      if (compare_int_elements(cursor->data, value) == 0) return true; // compare_int_elements förbereder generalisering
     }
   return false;
 }
@@ -204,8 +196,7 @@ bool ioopm_linked_list_is_empty(ioopm_list_t *list)
 
 void ioopm_linked_list_clear(ioopm_list_t *list)
 {
-  int list_size = ioopm_linked_list_size(list);
-  while (list_size > 0)
+  while (ioopm_linked_list_size(list) > 0)
     {
       ioopm_linked_list_remove(list, 0);
     }
@@ -229,10 +220,8 @@ bool ioopm_linked_list_any(ioopm_list_t *list, bool (*prop)(int, int), void *x) 
 // PRE: list != NULL
 void ioopm_linked_apply_to_all(ioopm_list_t *list, void (*fun)(int, int), void *x)
 {
-  for (node_t *cursor = list->first->next; cursor; cursor = cursor->next)
+  for (node_t *cursor = list->first->next; cursor != NULL; cursor = cursor->next)
     {
-      fun(*cursor->data, (int) x);
+      fun(cursor->data, (int) x);
     }
 }
-
-
