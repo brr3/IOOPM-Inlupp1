@@ -1,7 +1,9 @@
 #pragma once
 #include <stdbool.h>
 
-typedef struct list ioopm_list_t; /// Meta: struct definition goes in C file
+typedef struct list ioopm_list_t;
+
+#define nodes 10
 
 /// FIXME: better comments here
 /// @brief Creates a new empty list
