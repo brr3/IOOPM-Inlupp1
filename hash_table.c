@@ -7,7 +7,7 @@
 struct entry
 {
   int key;       // holds the key                                                                                                                         
-  char *value;   // holds the value                                                                                                                       
+  elem_t value;   // holds the value                                                                                                                       
   entry_t *next; // points to the next entry (possibly NULL)                                                                                              
 };
 
@@ -43,7 +43,7 @@ static entry_t *find_previous_entry_for_key(entry_t *address, int key)
 }
 
 
-static entry_t *entry_create(int key, char *value, entry_t *next)
+static entry_t *entry_create(int key, elem_t value, entry_t *next)
 {
   entry_t *new_entry = calloc(1, sizeof(entry_t));
 
@@ -88,7 +88,7 @@ static int modulo(int a, int b)
 }
 
 
-void ioopm_hash_table_insert(ioopm_hash_table_t *ht, int key, char *value)
+void ioopm_hash_table_insert(ioopm_hash_table_t *ht, int key, elem_t value)
 {
   int bucket = key;
   modulo_(&bucket, No_Buckets);
@@ -106,7 +106,7 @@ void ioopm_hash_table_insert(ioopm_hash_table_t *ht, int key, char *value)
 }
 
 
-char **ioopm_hash_table_lookup(ioopm_hash_table_t *ht, int key)
+elem_t *ioopm_hash_table_lookup(ioopm_hash_table_t *ht, int key)
 {
   int bucket = modulo(key, No_Buckets);
   entry_t *entry = find_previous_entry_for_key(&ht->buckets[bucket], key);
@@ -128,27 +128,27 @@ static void entry_destroy(entry_t *pointer)
   free(pointer);
 }
 
-
-char *ioopm_hash_table_remove(ioopm_hash_table_t *ht, int key)
+//TODO: Define behavior for failure to find key
+elem_t ioopm_hash_table_remove(ioopm_hash_table_t *ht, int key)
 {
   int bucket = modulo(key, No_Buckets);
   entry_t *entry = find_previous_entry_for_key(&ht->buckets[bucket], key);
   entry_t *next = entry->next;
   
-  if (next != NULL && next->key == key)                                                                       
+  if (next != NULL && next->key == key)
     {
-      char *removed_value = next->value;
-      
+      elem_t removed_value = next->value;
       entry->next = entry->next->next;
       entry_destroy(next);
       entry->next = NULL;
       
-      return removed_value;                                                                                    
-    }                                                                                                         
-  else                                                                                                        
-    {                                                                                                         
-      return NULL;                                                                                            
-    }                                                                                                        
+      return removed_value;
+    }
+  else
+    {
+      elem_t elem;
+      return elem;
+    }
 }
 
 
@@ -257,10 +257,10 @@ int *ioopm_hash_table_keys(ioopm_hash_table_t *ht)
 }
 
 
-char **ioopm_hash_table_values(ioopm_hash_table_t *ht)
+elem_t *ioopm_hash_table_values(ioopm_hash_table_t *ht)
 {
   size_t ht_size = ioopm_hash_table_size(ht);
-  char **values = calloc(ht_size + 1, sizeof(char*)); // +1 for string terminator NULL
+  elem_t *values = calloc(ht_size, sizeof(elem_t)); // +1 for string terminator NULL
   int n = 0;
 
   for (int i = 0; i < No_Buckets; ++i)
@@ -274,7 +274,6 @@ char **ioopm_hash_table_values(ioopm_hash_table_t *ht)
           ++n;
         }
     }
-  values[n] = NULL;
   return values;
 }
 
@@ -282,7 +281,7 @@ char **ioopm_hash_table_values(ioopm_hash_table_t *ht)
 //kan implementeras m.h.a hash_table_apply_to_all
 bool ioopm_hash_table_has_key(ioopm_hash_table_t *ht, int key)
 {
-  char **value_ptr = ioopm_hash_table_lookup(ht, key);
+  elem_t *value_ptr = ioopm_hash_table_lookup(ht, key);
   if (value_ptr == NULL)
     {
       return false;
@@ -293,7 +292,7 @@ bool ioopm_hash_table_has_key(ioopm_hash_table_t *ht, int key)
 }
 
 //kan implementeras m.h.a hash_table_apply_to_all
-bool ioopm_hash_table_has_value(ioopm_hash_table_t *ht, char *value)
+bool ioopm_hash_table_has_value(ioopm_hash_table_t *ht, elem_t value, cmp_fun_t compare_func)
 {
   entry_t *entry, *next;
 
@@ -303,7 +302,7 @@ bool ioopm_hash_table_has_value(ioopm_hash_table_t *ht, char *value)
       next = entry->next;
       while (next != NULL)
         {
-          if (strcmp(next->value, value) == 0)
+          if ((compare_func(next->value, value) == 0))
             {
               return true;
             }
@@ -319,12 +318,12 @@ bool ioopm_hash_table_all(ioopm_hash_table_t *h, ioopm_apply_function pred, void
   //Behöver optimiseras
   int size = ioopm_hash_table_size(h);
   int *keys = ioopm_hash_table_keys(h);
-  char **values = ioopm_hash_table_values(h);
+  elem_t *values = ioopm_hash_table_values(h);
   bool result = true;
   
   for (int i = 0; i < size && result; i++)
     {
-      result = result && pred(keys[i], values[i], arg);
+      result = result && pred(keys[i], &values[i], arg);
     }
   free(keys);
   free(values);
@@ -337,10 +336,10 @@ bool ioopm_hash_table_any(ioopm_hash_table_t *h, ioopm_apply_function pred, void
   //Behöver optimiseras
   int size = ioopm_hash_table_size(h);
   int *keys = ioopm_hash_table_keys(h);
-  char **values = ioopm_hash_table_values(h);
+  elem_t *values = ioopm_hash_table_values(h);
   for (int i = 0; i < size; i++)
     {
-      if (pred(keys[i], values[i], arg))
+      if (pred(keys[i], &values[i], arg))
         {
           free(keys);
           free(values);
@@ -357,11 +356,11 @@ void ioopm_hash_table_apply_to_all(ioopm_hash_table_t *h, ioopm_apply_function a
   //Behöver optimiseras
   int size = ioopm_hash_table_size(h);
   int *keys = ioopm_hash_table_keys(h);
-  char **values = ioopm_hash_table_values(h);
+  elem_t *values = ioopm_hash_table_values(h);
   
   for (int i = 0; i < size; i++)
     {
-      apply_fun(keys[i], values[i], arg);
+      apply_fun(keys[i], &values[i], arg);
     }
   free(keys);
   free(values);

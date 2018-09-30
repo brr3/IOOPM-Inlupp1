@@ -10,6 +10,7 @@ union elem
   unsigned int unsigned_integer;
   bool boolean;
   float float_number;
+  char *string;
   void *void_ptr;
 };
 

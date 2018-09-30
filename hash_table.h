@@ -1,11 +1,12 @@
 #pragma once
 #include <stdbool.h>
 #include <stdlib.h>
+#include "common.h"
 
 typedef struct entry entry_t;
 typedef struct hash_table ioopm_hash_table_t;
 
-typedef bool(*ioopm_apply_function)(int key, char *value, void *extra);
+typedef bool(*ioopm_apply_function)(int key, elem_t *value, void *extra);
 
 #define No_Buckets 17
 
@@ -17,19 +18,19 @@ ioopm_hash_table_t *ioopm_hash_table_create();
 /// @param ht hash table operated upon
 /// @param key key to insert
 /// @param value value to insert
-void ioopm_hash_table_insert(ioopm_hash_table_t *ht, int key, char *value);
+void ioopm_hash_table_insert(ioopm_hash_table_t *ht, int key, elem_t value);
 
 /// @brief lookup value for key in hash table ht
 /// @param ht hash table operated upon
 /// @param key key to lookup
 /// @return the value mapped to by key (temporary: return the pointer to the value mapped to by key)
-char **ioopm_hash_table_lookup(ioopm_hash_table_t *ht, int key);
+elem_t *ioopm_hash_table_lookup(ioopm_hash_table_t *ht, int key);
 
 /// @brief remove any mapping from key to a value
 /// @param ht hash table operated upon
 /// @param key key to remove
 /// @return the value mapped to by key
-char *ioopm_hash_table_remove(ioopm_hash_table_t *ht, int key);
+elem_t ioopm_hash_table_remove(ioopm_hash_table_t *ht, int key);
 
 /// @brief destroy the entire hash table and its entries
 /// @param ht hash table operated upon
@@ -57,7 +58,7 @@ int *ioopm_hash_table_keys(ioopm_hash_table_t *ht);
 /// @brief return the values for all entries in a hash map (in no particular order, but same as ioopm_hash_table_keys)
 /// @param h hash table operated upon
 /// @return an array of values for hash table h
-char **ioopm_hash_table_values(ioopm_hash_table_t *ht);
+elem_t *ioopm_hash_table_values(ioopm_hash_table_t *ht);
 
 /// @brief check if a hash table has an entry with a given key
 /// @param h hash table operated upon
@@ -67,7 +68,7 @@ bool ioopm_hash_table_has_key(ioopm_hash_table_t *ht, int key);
 /// @brief check if a hash table has an entry with a given value
 /// @param h hash table operated upon
 /// @param value the value sought 
-bool ioopm_hash_table_has_value(ioopm_hash_table_t *ht, char *value);
+bool ioopm_hash_table_has_value(ioopm_hash_table_t *ht, elem_t value, cmp_fun_t compare_func);
 
 /// @brief check if a predicate is satisfied by all entries in a hash table
 /// @param h hash table operated upon
