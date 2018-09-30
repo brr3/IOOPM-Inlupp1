@@ -204,24 +204,38 @@ void ioopm_linked_list_clear(ioopm_list_t *list)
 
 
 // PRE: list != NULL
-bool ioopm_linked_list_all(ioopm_list_t *list, bool (*prop)(int, int), void *x) // TODO
+bool ioopm_linked_list_all(ioopm_list_t *list, bool (*prop)(int, void *), void *x) // TODO
 {
-  return false;
+  node_t *cursor = list->first->next;
+  bool result = true;
+  while(cursor != NULL && result)
+    {
+      result = prop(cursor->data, x);
+      cursor = cursor->next;
+    }
+  return result;
 }
 
 
 // PRE: list != NULL
-bool ioopm_linked_list_any(ioopm_list_t *list, bool (*prop)(int, int), void *x) // TODO
+bool ioopm_linked_list_any(ioopm_list_t *list, bool (*prop)(int, void *), void *x) // TODO
 {
-  return false;
+  node_t *cursor = list->first->next;
+  bool result = false;
+  while(cursor != NULL && !result)
+    {
+      result = prop(cursor->data, x);
+      cursor = cursor->next;
+    }
+  return result;
 }
 
 
 // PRE: list != NULL
-void ioopm_linked_apply_to_all(ioopm_list_t *list, void (*fun)(int, int), void *x)
+void ioopm_linked_apply_to_all(ioopm_list_t *list, void (*fun)(int, void *), void *x)
 {
   for (node_t *cursor = list->first->next; cursor != NULL; cursor = cursor->next)
     {
-      fun(cursor->data, (int) x);
+      fun(cursor->data, x);
     }
 }
