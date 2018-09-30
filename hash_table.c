@@ -128,6 +128,7 @@ static void entry_destroy(entry_t *pointer)
   free(pointer);
 }
 
+
 //TODO: Define behavior for failure to find key
 elem_t ioopm_hash_table_remove(ioopm_hash_table_t *ht, int key)
 {
@@ -278,20 +279,18 @@ elem_t *ioopm_hash_table_values(ioopm_hash_table_t *ht)
 }
 
 
-//kan implementeras m.h.a hash_table_apply_to_all
-bool ioopm_hash_table_has_key(ioopm_hash_table_t *ht, int key)
+static bool key_equiv(int key, elem_t *value_ignored, void *x)
 {
-  elem_t *value_ptr = ioopm_hash_table_lookup(ht, key);
-  if (value_ptr == NULL)
-    {
-      return false;
-    } else
-    {
-      return true;
-    }
+  return key == *((int *) x);
 }
 
-//kan implementeras m.h.a hash_table_apply_to_all
+
+bool ioopm_hash_table_has_key(ioopm_hash_table_t *ht, int key)
+{
+  return ioopm_hash_table_any(ht, key_equiv, &key);
+}
+
+
 bool ioopm_hash_table_has_value(ioopm_hash_table_t *ht, elem_t value, cmp_fun_t compare_func)
 {
   entry_t *entry, *next;
@@ -312,6 +311,7 @@ bool ioopm_hash_table_has_value(ioopm_hash_table_t *ht, elem_t value, cmp_fun_t 
   return false;
 }
 
+
 //kan implementeras m.h.a hash_table_apply_to_all
 bool ioopm_hash_table_all(ioopm_hash_table_t *h, ioopm_apply_function pred, void *arg)
 {
@@ -329,6 +329,7 @@ bool ioopm_hash_table_all(ioopm_hash_table_t *h, ioopm_apply_function pred, void
   free(values);
   return result;  
 }
+
 
 //kan implementeras m.h.a hash_table_apply_to_all
 bool ioopm_hash_table_any(ioopm_hash_table_t *h, ioopm_apply_function pred, void *arg)
@@ -350,6 +351,7 @@ bool ioopm_hash_table_any(ioopm_hash_table_t *h, ioopm_apply_function pred, void
   free(values);
   return false;
 }
+
 
 void ioopm_hash_table_apply_to_all(ioopm_hash_table_t *h, ioopm_apply_function apply_fun, void *arg)
 {

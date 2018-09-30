@@ -39,9 +39,9 @@ static bool test_lookup(ioopm_hash_table_t *ht, int key) //DEMO M39 **
       errno = EINVAL;
       return false;
     }
-}
-*/
+    } */
 
+    
 static void test_create_destroy()
 {
    ioopm_hash_table_t *ht = ioopm_hash_table_create();
@@ -294,10 +294,12 @@ static void test_apply_all()
   ioopm_hash_table_destroy(ht);
 }
 
+
 static int elem_cmp_string(elem_t a, elem_t b)
 {
   return strcmp(a.string, b.string);
 }
+
 
 static void test_has_value()
 {
@@ -310,6 +312,20 @@ static void test_has_value()
   CU_ASSERT_TRUE(ioopm_hash_table_has_value(ht, elem2, elem_cmp_string));
   elem.string = "ghi";
   CU_ASSERT_FALSE(ioopm_hash_table_has_value(ht, elem, elem_cmp_string));
+  ioopm_hash_table_destroy(ht);
+}
+
+
+static void test_has_key()
+{
+  ioopm_hash_table_t *ht = ioopm_hash_table_create();
+  elem_t elem = {.string = "abc"};
+  elem_t elem2 = {.string = "def"};
+  ioopm_hash_table_insert(ht, 0, elem);
+  ioopm_hash_table_insert(ht, 16, elem2);
+  CU_ASSERT_TRUE(ioopm_hash_table_has_key(ht, 0));
+  CU_ASSERT_TRUE(ioopm_hash_table_has_key(ht, 16));
+  CU_ASSERT_FALSE(ioopm_hash_table_has_key(ht, 2));
   ioopm_hash_table_destroy(ht);
 }
 
@@ -342,7 +358,8 @@ int main(void)
       (NULL == CU_add_test(pSuiteNW, "test of any", test_any)) ||
       (NULL == CU_add_test(pSuiteNW, "test of all", test_all)) ||
       (NULL == CU_add_test(pSuiteNW, "test of apply to all", test_apply_all)) ||
-      (NULL == CU_add_test(pSuiteNW, "test of has_value", test_has_value))
+      (NULL == CU_add_test(pSuiteNW, "test of has_value", test_has_value)) ||
+      (NULL == CU_add_test(pSuiteNW, "test of has_key", test_has_key))
       ) {
     CU_cleanup_registry();
     return CU_get_error();
