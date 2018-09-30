@@ -21,4 +21,3 @@ clean:
 gitadd:
 	git add *.c *.h Makefile
 
-
