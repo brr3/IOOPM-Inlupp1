@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __COMMON__
+#define __COMMON__
+#include <stdbool.h>
 
 typedef union elem elem_t;
 
@@ -14,10 +16,5 @@ union elem
 //Compares 2 elements, returns 0 if they are equal.
 //± has meaning depending on type.
 typedef int(*cmp_fun_t)(elem_t a, elem_t b);
-
-
-int cmp_int(elem_t a, elem_t b)
-{
-  return b.integer - a.integer;
-}
   
+#endif

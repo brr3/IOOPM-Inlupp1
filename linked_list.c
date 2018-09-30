@@ -150,13 +150,6 @@ elem_t ioopm_linked_list_get(ioopm_list_t *list, int index)
   return previous_node->next->data;
 }
 
-
-static int compare_int_elements(int a, int b)
-{
-  return b - a;
-}
-
-
 // PRE: list != NULL
 bool ioopm_linked_list_contains(ioopm_list_t *list, elem_t value, cmp_fun_t compare_fun)
 {

@@ -8,6 +8,11 @@
 #include "CUnit/Basic.h"
 #include "linked_list.h"
 
+int elem_cmp_int(elem_t a, elem_t b)
+{
+  return b.integer - a.integer;
+}
+
 
 int init_suite(void)
 {
@@ -35,17 +40,17 @@ static void test_insert_prepend()
   for (int i = 0; i < nodes; i++)
     {
       elem.integer = i;
-      CU_ASSERT_FALSE(ioopm_linked_list_contains(list, elem, cmp_int));
+      CU_ASSERT_FALSE(ioopm_linked_list_contains(list, elem, elem_cmp_int));
       ioopm_linked_list_prepend(list, elem);
       CU_ASSERT_TRUE(ioopm_linked_list_get(list, 0).integer == elem.integer);
-      CU_ASSERT_TRUE(ioopm_linked_list_contains(list, elem, cmp_int));
+      CU_ASSERT_TRUE(ioopm_linked_list_contains(list, elem, elem_cmp_int));
     }
   for (int i = nodes - 1; i >= 0; i--)
     {
       elem.integer = i;
       ioopm_linked_list_prepend(list, elem);
       CU_ASSERT_TRUE(ioopm_linked_list_get(list, 0).integer == elem.integer);
-      CU_ASSERT_TRUE(ioopm_linked_list_contains(list, elem, cmp_int));
+      CU_ASSERT_TRUE(ioopm_linked_list_contains(list, elem, elem_cmp_int));
     }
   ioopm_linked_list_destroy(list);
 }
@@ -58,17 +63,17 @@ static void test_insert_append()
   for (int i = 0; i < nodes; i++)
     {
       elem.integer = i;
-      CU_ASSERT_FALSE(ioopm_linked_list_contains(list, elem, cmp_int));
+      CU_ASSERT_FALSE(ioopm_linked_list_contains(list, elem, elem_cmp_int));
       ioopm_linked_list_append(list, elem);
       CU_ASSERT_TRUE(ioopm_linked_list_get(list, i).integer == elem.integer);
-      CU_ASSERT_TRUE(ioopm_linked_list_contains(list, elem, cmp_int));
+      CU_ASSERT_TRUE(ioopm_linked_list_contains(list, elem, elem_cmp_int));
     }
   for (int i = nodes - 1; i >= 0; i--)
     {
       elem.integer = i;
       ioopm_linked_list_append(list, elem);
       CU_ASSERT_TRUE(ioopm_linked_list_get(list, i).integer == elem.integer);
-      CU_ASSERT_TRUE(ioopm_linked_list_contains(list, elem, cmp_int));
+      CU_ASSERT_TRUE(ioopm_linked_list_contains(list, elem, elem_cmp_int));
     }
   ioopm_linked_list_destroy(list);
 }
@@ -81,17 +86,17 @@ static void test_insert_insert()
   for (int i = 0; i < nodes; i++)
     {
       elem.integer = i;
-      CU_ASSERT_FALSE(ioopm_linked_list_contains(list, elem, cmp_int));
+      CU_ASSERT_FALSE(ioopm_linked_list_contains(list, elem, elem_cmp_int));
       ioopm_linked_list_insert(list, i, elem);
       CU_ASSERT_TRUE(ioopm_linked_list_get(list, i).integer == elem.integer);
-      CU_ASSERT_TRUE(ioopm_linked_list_contains(list, elem, cmp_int));
+      CU_ASSERT_TRUE(ioopm_linked_list_contains(list, elem, elem_cmp_int));
     }
   for (int i = nodes - 1; i >= 0; i--)
     {
       elem.integer = i;
       ioopm_linked_list_insert(list, i, elem);
       CU_ASSERT_TRUE(ioopm_linked_list_get(list, i).integer == elem.integer);
-      CU_ASSERT_TRUE(ioopm_linked_list_contains(list, elem, cmp_int));
+      CU_ASSERT_TRUE(ioopm_linked_list_contains(list, elem, elem_cmp_int));
     }
   ioopm_linked_list_destroy(list);
 }
@@ -109,9 +114,9 @@ static void test_remove()
   for (int i = nodes - 1; i >= 0; i--)
     {
       elem.integer = i;
-      CU_ASSERT_TRUE(ioopm_linked_list_contains(list, elem, cmp_int));
+      CU_ASSERT_TRUE(ioopm_linked_list_contains(list, elem, elem_cmp_int));
       ioopm_linked_list_remove(list, i);
-      CU_ASSERT_FALSE(ioopm_linked_list_contains(list, elem, cmp_int));
+      CU_ASSERT_FALSE(ioopm_linked_list_contains(list, elem, elem_cmp_int));
     }
   ioopm_linked_list_destroy(list);
 }
