@@ -19,8 +19,8 @@ struct hash_table
 
 ioopm_hash_table_t *ioopm_hash_table_create()
 {
-  ioopm_hash_table_t *result = calloc(1, sizeof(ioopm_hash_table_t));
-  return result;
+  ioopm_hash_table_t *new_hash_table = calloc(1, sizeof(ioopm_hash_table_t));
+  return new_hash_table;
 }
 
 
@@ -173,7 +173,6 @@ static size_t ioopm_hash_table_size_sr(ioopm_hash_table_t *ht, entry_t *temp, in
       return ioopm_hash_table_size_sr(ht, &ht->buckets[i + 1], counter, i + 1);
     }
 }
-
 
 
 size_t ioopm_hash_table_size(ioopm_hash_table_t *ht) // ACHIEVEMENT F14 DEMO

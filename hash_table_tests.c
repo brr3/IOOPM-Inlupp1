@@ -201,10 +201,12 @@ static void test_values()
   ioopm_hash_table_destroy(ht);
 }
 
+
 static bool comp_value(int key, char *value, void *extra)
 {
   return strcmp(value, (char *)extra) == 0;
 }
+
 
 static void test_all()
 {
@@ -218,10 +220,12 @@ static void test_all()
   ioopm_hash_table_destroy(ht);
 }
 
+
 static bool comp_key(int key, char *value, void *extra)
 {
   return key == *((int *)extra);
 }
+
 
 static bool any_length_4(int key, char *value, void *arg)
 {
@@ -231,6 +235,7 @@ static bool any_length_4(int key, char *value, void *arg)
     }
   return false;
 }
+
 
 static void test_any()
 {
@@ -253,11 +258,13 @@ static void test_any()
   ioopm_hash_table_destroy(ht);
 }
 
+
 static bool value_count(int key, char *value, void *result)
 {
   *(int *)result += strlen(value);
   return true;
 }
+
 
 static void test_apply_all()
 {
@@ -272,6 +279,7 @@ static void test_apply_all()
 
   ioopm_hash_table_destroy(ht);
 }
+
 
 static void test_has_value()
 {
@@ -328,4 +336,3 @@ int main(void)
   CU_cleanup_registry();
   return CU_get_error();
 }
-
