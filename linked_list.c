@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "linked_list.h"
-
+#include "iterator.h"
 
 typedef struct node node_t;
 
@@ -19,6 +19,25 @@ struct node
   node_t *next;
 };
 
+struct iter 
+{
+  node_t *current;
+};
+
+
+ioopm_list_iterator_t *list_iterator(ioopm_list_t *list)
+{
+  ioopm_list_iterator_t *result = calloc(1, sizeof(ioopm_list_iterator_t));
+  result->current = list->first;
+  return result;
+}
+
+
+bool iterator_has_next(ioopm_list_iterator_t *iter)
+{
+  return iter->current->next != NULL; 
+}
+// ------------------------------- 
 
 ioopm_list_t *ioopm_linked_list_create()
 {

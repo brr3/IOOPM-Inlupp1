@@ -164,40 +164,9 @@ void ioopm_hash_table_destroy(ioopm_hash_table_t *ht)
 }
 
 
-static size_t ioopm_hash_table_size_sr(ioopm_hash_table_t *ht, entry_t *temp, int counter, int i)
+size_t ioopm_hash_table_size(ioopm_hash_table_t *ht)
 {
-  if (i >= No_Buckets)
-    {
-      return (size_t) counter;
-    } else if (temp->next != NULL)
-    {
-      return ioopm_hash_table_size_sr(ht, temp->next, counter + 1, i);
-    } else
-    {
-      return ioopm_hash_table_size_sr(ht, &ht->buckets[i + 1], counter, i + 1);
-    }
-}
-
-
-size_t ioopm_hash_table_size(ioopm_hash_table_t *ht) // ACHIEVEMENT F14 DEMO
-{
-  return ioopm_hash_table_size_sr(ht, &ht->buckets[0], 0, 0);
-}
-
- 
-size_t ioopm_hash_table_size_i(ioopm_hash_table_t *ht)
-{
-  int counter = 0;
-  for (int i = 0; i < No_Buckets; i++)
-    {
-      entry_t *temp = &ht->buckets[i];
-      while(temp->next != NULL)
-        {
-          temp = temp->next;
-          counter = counter + 1;
-        }        
-    }
-  return (size_t) counter;
+  return ht->size;
 }
 
 

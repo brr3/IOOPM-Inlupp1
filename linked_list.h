@@ -6,6 +6,13 @@
 
 typedef struct list ioopm_list_t;
 
+typedef struct iter ioopm_list_iterator_t;
+
+/// @brief Create an iterator for a given list
+/// @param the list to be iterated over
+/// @return an iteration positioned at the start of list
+ioopm_list_iterator_t *ioopm_list_iterator(ioopm_list_t *list);
+
 #define nodes 10
 
 /// FIXME: better comments here
