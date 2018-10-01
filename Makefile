@@ -2,8 +2,8 @@ COMPILER = gcc
 OPTIONS = -g -Wall -pedantic
 LINKOPTIONS = -lcunit	
 
-test_hash: hash_table.o hash_table_tests.c
-	$(COMPILER) $(OPTIONS) hash_table.o hash_table_tests.c -o test_hash $(LINKOPTIONS)
+test_hash: hash_table.o linked_list.o hash_table_tests.c
+	$(COMPILER) $(OPTIONS) hash_table.o hash_table_tests.c linked_list.o -o test_hash $(LINKOPTIONS)
 
 test_list: linked_list.o linked_list_tests.o
 	$(COMPILER) $(OPTIONS) linked_list.o linked_list_tests.o -o test_list $(LINKOPTIONS)

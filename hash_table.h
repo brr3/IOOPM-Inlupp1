@@ -2,11 +2,12 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include "common.h"
+#include "linked_list.h"
 
 typedef struct entry entry_t;
 typedef struct hash_table ioopm_hash_table_t;
 
-typedef bool(*ioopm_apply_function)(int key, elem_t *value, void *extra);
+typedef bool(*ioopm_apply_function)(int key, elem_t value, void *extra);
 
 #define No_Buckets 17
 
@@ -53,12 +54,12 @@ void ioopm_hash_table_clear(ioopm_hash_table_t *ht);
 /// @brief return the keys for all entries in a hash map (in no particular order, but same as ioopm_hash_table_values)
 /// @param h hash table operated upon
 /// @return an array of keys for hash table h
-int *ioopm_hash_table_keys(ioopm_hash_table_t *ht);
+ioopm_list_t *ioopm_hash_table_keys(ioopm_hash_table_t *ht);
 
 /// @brief return the values for all entries in a hash map (in no particular order, but same as ioopm_hash_table_keys)
 /// @param h hash table operated upon
 /// @return an array of values for hash table h
-elem_t *ioopm_hash_table_values(ioopm_hash_table_t *ht);
+ioopm_list_t *ioopm_hash_table_values(ioopm_hash_table_t *ht);
 
 /// @brief check if a hash table has an entry with a given key
 /// @param h hash table operated upon

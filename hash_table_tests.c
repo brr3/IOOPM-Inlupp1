@@ -185,12 +185,12 @@ static void test_keys()
     {
       ioopm_hash_table_insert(ht, i, elem);
     }
-  int *keys = ioopm_hash_table_keys(ht);
+  ioopm_list_t *keys = ioopm_hash_table_keys(ht);
   for (int i = 0; (size_t) i < ioopm_hash_table_size(ht); ++i)
     {
-      CU_ASSERT_TRUE(keys[i] == i);
+      CU_ASSERT_TRUE(ioopm_linked_list_get(keys, i).integer == i);
     }
-  free(keys);
+  ioopm_linked_list_destroy(keys);
   ioopm_hash_table_destroy(ht);
 }
 
@@ -203,19 +203,19 @@ static void test_values()
     {
       ioopm_hash_table_insert(ht, i, elem);
     }
-  elem_t *values = ioopm_hash_table_values(ht);
+  ioopm_list_t *values = ioopm_hash_table_values(ht);
   for (int i = 0; (size_t) i < ioopm_hash_table_size(ht); ++i)
     {
-      CU_ASSERT_TRUE(strcmp(values[i].string, "abc") == 0);
+      CU_ASSERT_TRUE(strcmp(ioopm_linked_list_remove(values, 0).string, "abc") == 0);
     }
-  free(values);
+  ioopm_linked_list_destroy(values);
   ioopm_hash_table_destroy(ht);
 }
 
 
-static bool comp_value(int key, elem_t *value, void *extra)
+static bool comp_value(int key, elem_t value, void *extra)
 {
-  return !strcmp(value->string, ((elem_t *)extra)->string);
+  return !strcmp(value.string, ((elem_t *)extra)->string);
 }
 
 
@@ -232,15 +232,15 @@ static void test_all()
 }
 
 
-static bool comp_key(int key, elem_t *value, void *extra)
+static bool comp_key(int key, elem_t value, void *extra)
 {
   return key == *((int *)extra);
 }
 
 
-static bool any_length_4(int key, elem_t *value, void *arg)
+static bool any_length_4(int key, elem_t value, void *arg)
 {
-  if (strlen(value->string) == 4)
+  if (strlen(value.string) == 4)
     {
       return true;
     }
@@ -272,9 +272,9 @@ static void test_any()
 }
 
 
-static bool value_count(int key, elem_t *value, void *result)
+static bool value_count(int key, elem_t value, void *result)
 {
-  *(int *)result += strlen(value->string);
+  *(int *)result += strlen(value.string);
   return true;
 }
 
