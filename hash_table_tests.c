@@ -20,27 +20,6 @@ int clean_suite(void)
   return 0;
 }
 
-
-/*
-static bool test_lookup(ioopm_hash_table_t *ht, int key) //DEMO M39 **
-{
-  char **value_ptr = ioopm_hash_table_lookup(ht, key);
-  char *value = NULL; // no value yet
-  if (value_ptr != NULL)
-    {
-      value = *value_ptr; // Value now points to the string the key maps to in ht
-      printf("Value for key %d found: %s\n", key, value);
-      // *value_ptr = "Some other string"; // We just updated the value!
-      return true;
-    }
-  else
-    {
-      printf("Key %d not found.\n", key);
-      errno = EINVAL;
-      return false;
-    }
-    } */
-
     
 static void test_create_destroy()
 {
@@ -295,9 +274,9 @@ static void test_apply_all()
 }
 
 
-static int elem_cmp_string(elem_t a, elem_t b)
+static bool elem_cmp_string(int key_ignored, elem_t value, void *x)
 {
-  return strcmp(a.string, b.string);
+  return strcmp(value.string, ((elem_t *)x)->string) == 0;
 }
 
 

@@ -14,12 +14,14 @@ struct entry
 struct hash_table
 {
   entry_t buckets[No_Buckets];
+  size_t size;
 };
 
 
 ioopm_hash_table_t *ioopm_hash_table_create()
 {
   ioopm_hash_table_t *new_hash_table = calloc(1, sizeof(ioopm_hash_table_t));
+  new_hash_table->size = 0;
   return new_hash_table;
 }
 
@@ -102,6 +104,7 @@ void ioopm_hash_table_insert(ioopm_hash_table_t *ht, int key, elem_t value)
   else
     {
       entry->next = entry_create(key, value, next);
+      ht->size += 1;
     }
 }
 
@@ -142,7 +145,7 @@ elem_t ioopm_hash_table_remove(ioopm_hash_table_t *ht, int key)
       entry->next = entry->next->next;
       entry_destroy(next);
       entry->next = NULL;
-      
+      ht->size -= 1;
       return removed_value;
     }
   else
@@ -287,31 +290,13 @@ bool ioopm_hash_table_has_key(ioopm_hash_table_t *ht, int key)
 }
 
 
-bool ioopm_hash_table_has_value(ioopm_hash_table_t *ht, elem_t value, cmp_fun_t compare_func)
+bool ioopm_hash_table_has_value(ioopm_hash_table_t *ht, elem_t value, ioopm_apply_function compare_func)
 {
-  entry_t *entry, *next;
-
-  for (int i = 0; i < No_Buckets; ++i)
-    {
-      entry = &ht->buckets[i];
-      next = entry->next;
-      while (next != NULL)
-        {
-          if ((compare_func(next->value, value) == 0))
-            {
-              return true;
-            }
-          next = next->next;
-        }
-    }
-  return false;
+  return ioopm_hash_table_any(ht, compare_func, &value);
 }
 
-
-//kan implementeras m.h.a hash_table_apply_to_all
 bool ioopm_hash_table_all(ioopm_hash_table_t *h, ioopm_apply_function pred, void *arg)
 {
-  //Behöver optimiseras
   int size = ioopm_hash_table_size(h);
   ioopm_list_t *keys = ioopm_hash_table_keys(h);
   ioopm_list_t *values = ioopm_hash_table_values(h);
@@ -326,11 +311,8 @@ bool ioopm_hash_table_all(ioopm_hash_table_t *h, ioopm_apply_function pred, void
   return result;  
 }
 
-
-//kan implementeras m.h.a hash_table_apply_to_all
 bool ioopm_hash_table_any(ioopm_hash_table_t *h, ioopm_apply_function pred, void *arg)
 {
-  //Behöver optimiseras
   int size = ioopm_hash_table_size(h);
   ioopm_list_t *keys = ioopm_hash_table_keys(h);
   ioopm_list_t *values = ioopm_hash_table_values(h);

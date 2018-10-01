@@ -69,7 +69,7 @@ bool ioopm_hash_table_has_key(ioopm_hash_table_t *ht, int key);
 /// @brief check if a hash table has an entry with a given value
 /// @param h hash table operated upon
 /// @param value the value sought 
-bool ioopm_hash_table_has_value(ioopm_hash_table_t *ht, elem_t value, cmp_fun_t compare_func);
+bool ioopm_hash_table_has_value(ioopm_hash_table_t *ht, elem_t value, ioopm_apply_function compare_func);
 
 /// @brief check if a predicate is satisfied by all entries in a hash table
 /// @param h hash table operated upon
