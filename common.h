@@ -15,7 +15,7 @@ union elem
 };
 
 //Compares 2 elements, returns 0 if they are equal.
-//± has meaning depending on type.
+//± has meaning depending on implementation.
 typedef int(*cmp_fun_t)(elem_t a, elem_t b);
   
 #endif

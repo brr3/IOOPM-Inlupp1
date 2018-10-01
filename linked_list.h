@@ -1,6 +1,7 @@
 #ifndef __LINKED_LIST__
 #define __LINKED_LIST__
 #include <stdbool.h>
+#include <stdlib.h>
 #include "common.h"
 
 typedef struct list ioopm_list_t;
@@ -61,7 +62,7 @@ bool ioopm_linked_list_contains(ioopm_list_t *list, elem_t element, cmp_fun_t co
 /// @brief Lookup the number of elements in the linked list in O(1) time
 /// @param list the linked list
 /// @return the number of elements in the list
-int ioopm_linked_list_size(ioopm_list_t *list);
+size_t ioopm_linked_list_size(ioopm_list_t *list);
 
 /// @brief Test whether a list is empty or not
 /// @param list the linked list

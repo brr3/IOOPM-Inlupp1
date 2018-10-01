@@ -10,7 +10,7 @@ struct list
 {
   node_t *first;
   node_t *last;
-  int size;
+  size_t size;
 };
 
 struct node
@@ -162,7 +162,7 @@ bool ioopm_linked_list_contains(ioopm_list_t *list, elem_t value, cmp_fun_t comp
 
 
 // PRE: list != NULL
-int ioopm_linked_list_size(ioopm_list_t *list)
+size_t ioopm_linked_list_size(ioopm_list_t *list)
 {
   return list->size;
 }
