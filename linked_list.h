@@ -5,6 +5,7 @@
 #include "common.h"
 
 typedef struct list ioopm_list_t;
+typedef struct iter ioopm_list_iterator_t;
 
 #define nodes 10
 
