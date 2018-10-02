@@ -22,13 +22,15 @@ struct node
 struct iter 
 {
   node_t *current;
+  ioopm_list_t *list;
 };
 
 
-ioopm_list_iterator_t *list_iterator(ioopm_list_t *list)
+ioopm_list_iterator_t *ioopm_list_iterator(ioopm_list_t *list) 
 {
   ioopm_list_iterator_t *result = calloc(1, sizeof(ioopm_list_iterator_t));
   result->current = list->first;
+  result->list = list;
   return result;
 }
 
@@ -37,7 +39,59 @@ bool iterator_has_next(ioopm_list_iterator_t *iter)
 {
   return iter->current->next != NULL; 
 }
-// ------------------------------- 
+
+
+elem_t iterator_get_current(ioopm_list_iterator_t *iter)
+{
+  return iter->current->next->data; 
+}
+
+
+elem_t iterator_next(ioopm_list_iterator_t *iter)
+{
+  iter->current = iter->current->next;
+  return iter->current->data;
+}
+
+
+void iterator_delete(ioopm_list_iterator_t *iter)
+{
+  free(iter);
+}
+
+
+void iterator_reset(ioopm_list_iterator_t *iter)
+{
+  iter->current = iter->list->first;
+}
+
+
+/*
+elem_t iterator_remove(ioopm_list_iterator_t *iter) SEG FAULT, REDOVISNING R52
+{
+  node_t *to_remove = iter->current->next; /// Cache result
+  elem_t result = to_remove->data;
+  
+  iter->current->next = to_remove->next;  /// Move forward
+
+  free(to_remove); /// Remove link
+  return result;
+} */
+
+
+elem_t iterator_remove(ioopm_list_iterator_t *iter)
+{
+  node_t *to_remove = iter->current->next; /// Cache result
+  elem_t result;
+  
+  result = to_remove->data;
+  
+  iter->current->next = to_remove->next;  /// Move forward
+  iter->list->size -= 1;
+  free(to_remove); /// Remove link
+  return result;
+} 
+
 
 ioopm_list_t *ioopm_linked_list_create()
 {
@@ -55,7 +109,7 @@ ioopm_list_t *ioopm_linked_list_create()
 // PRE: list != NULL 
 void ioopm_linked_list_destroy(ioopm_list_t *list)
 {
-  ioopm_linked_list_clear(list);
+  ioopm_linked_list_clear(list); 
   free(list->first); // Free the sentinel
   free(list);
 }
@@ -143,18 +197,17 @@ elem_t ioopm_linked_list_remove(ioopm_list_t *list, int index)
 {
   int list_size = ioopm_linked_list_size(list);
   int valid_index = list_inner_adjust_index(index, list_size);
-  
-  node_t *previous_node = list_inner_find_previous(list->first, valid_index);
 
-  node_t *to_remove = previous_node->next;
-  elem_t removed_value = to_remove->data;
-  previous_node->next = to_remove->next;
+  ioopm_list_iterator_t *iter = ioopm_list_iterator(list);
+  for (int i = 0; i < valid_index; ++i)
+    {
+      iterator_next(iter); 
+    }
 
-  free(to_remove);                   
-  
-  list->size -= 1;
-  
-  return removed_value;
+  elem_t removed_data = iterator_remove(iter);
+
+  iterator_delete(iter);
+  return removed_data;
 }
 
 

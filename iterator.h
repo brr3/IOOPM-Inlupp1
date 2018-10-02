@@ -5,6 +5,13 @@
 #include "linked_list.h"
 #include "common.h"
 
+typedef struct iter ioopm_list_iterator_t;
+
+/// @brief Create an iterator for a given list
+/// @param the list to be iterated over
+/// @return an iteration positioned at the start of list
+ioopm_list_iterator_t *ioopm_list_iterator(ioopm_list_t *list);
+
 /// @brief Checks if there are more elements to iterate over
 /// @param iter the iterator
 /// @return true if
