@@ -7,31 +7,31 @@
 typedef struct entry entry_t;
 typedef struct hash_table ioopm_hash_table_t;
 
-typedef bool(*ioopm_apply_function)(int key, elem_t value, void *extra);
-
 #define No_Buckets 17
 
 /// @brief Create a new hash table
+/// @param hash_function hash function to convert keys
+/// @param compare_function function to compare the keys  
 /// @return A new empty hash table
-ioopm_hash_table_t *ioopm_hash_table_create();
+ioopm_hash_table_t *ioopm_hash_table_create(ioopm_hash_function hash_function, ioopm_apply_function compare_function);
 
 /// @brief add key => value entry in hash table ht
 /// @param ht hash table operated upon
 /// @param key key to insert
 /// @param value value to insert
-void ioopm_hash_table_insert(ioopm_hash_table_t *ht, int key, elem_t value);
+void ioopm_hash_table_insert(ioopm_hash_table_t *ht, elem_t key, elem_t value);
 
 /// @brief lookup value for key in hash table ht
 /// @param ht hash table operated upon
 /// @param key key to lookup
 /// @return the value mapped to by key (temporary: return the pointer to the value mapped to by key)
-elem_t *ioopm_hash_table_lookup(ioopm_hash_table_t *ht, int key);
+elem_t *ioopm_hash_table_lookup(ioopm_hash_table_t *ht, elem_t key);
 
 /// @brief remove any mapping from key to a value
 /// @param ht hash table operated upon
 /// @param key key to remove
 /// @return the value mapped to by key
-elem_t ioopm_hash_table_remove(ioopm_hash_table_t *ht, int key);
+elem_t ioopm_hash_table_remove(ioopm_hash_table_t *ht, elem_t key);
 
 /// @brief destroy the entire hash table and its entries
 /// @param ht hash table operated upon
@@ -64,12 +64,12 @@ ioopm_list_t *ioopm_hash_table_values(ioopm_hash_table_t *ht);
 /// @brief check if a hash table has an entry with a given key
 /// @param h hash table operated upon
 /// @param key the key sought 
-bool ioopm_hash_table_has_key(ioopm_hash_table_t *ht, int key);
+bool ioopm_hash_table_has_key(ioopm_hash_table_t *ht, elem_t key);
 
 /// @brief check if a hash table has an entry with a given value
 /// @param h hash table operated upon
 /// @param value the value sought 
-bool ioopm_hash_table_has_value(ioopm_hash_table_t *ht, elem_t value, ioopm_apply_function compare_func);
+bool ioopm_hash_table_has_value(ioopm_hash_table_t *ht, elem_t value);
 
 /// @brief check if a predicate is satisfied by all entries in a hash table
 /// @param h hash table operated upon
