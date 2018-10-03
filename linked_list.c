@@ -24,6 +24,8 @@ struct iter
   ioopm_list_t *list;
 };
 
+static node_t *link_new(elem_t value, node_t *next);
+
 
 ioopm_list_iterator_t *ioopm_list_iterator(ioopm_list_t *list) 
 {
@@ -63,8 +65,8 @@ elem_t ioopm_iterator_remove(ioopm_list_iterator_t *iter)
 
 void ioopm_iterator_insert(ioopm_list_iterator_t *iter, elem_t data)
 {
-  iter->current->next = iter->current;
-  iter->current->data = data;
+  iter->current->next = link_new(data, iter->current->next);
+  iter->list->size += 1;
 }
 
 
@@ -184,9 +186,10 @@ void ioopm_linked_list_insert(ioopm_list_t *list, int index, elem_t value)
 
   node_t *previous_node;
   
-  if (valid_index < list_size) {
-    previous_node = list_inner_find_previous(list->first, valid_index);  
-  }
+  if (valid_index < list_size)
+    {
+      previous_node = list_inner_find_previous(list->first, valid_index);  
+    }
   else
     {
       previous_node = list_inner_find_previous(list->last, valid_index);
