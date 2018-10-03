@@ -1,10 +1,5 @@
-#ifndef __ITERATOR__
-#define __ITERATOR__
-#include <stdbool.h>
-#include <stdlib.h>
+#pragma once
 #include "linked_list.h"
-#include "common.h"
-
 
 /// @brief Create an iterator for a given list
 /// @param the list to be iterated over
@@ -43,4 +38,3 @@ elem_t ioopm_iterator_current(ioopm_list_iterator_t *iter);
 /// @brief Destroy the iterator and return its resources
 /// @param iter the iterator
 void ioopm_iterator_destroy(ioopm_list_iterator_t *iter);
-#endif

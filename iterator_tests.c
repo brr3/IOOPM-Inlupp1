@@ -1,18 +1,25 @@
-#include "iterator.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <errno.h>
+#include <stdbool.h>
+#include <string.h>
+#include <ctype.h>
+#include "CUnit/Basic.h"
 #include "linked_list.h"
-#include <CUnit/Basic.h>
+#include "iterator.h"
 
-int init_suite(void)
+static int init_suite(void)
 {
   return 0;
 }
 
-int clean_suite(void)
+static int clean_suite(void)
 {
   return 0;
 }
 
-void test_create_destroy()
+
+static void test_create_destroy()
 {
   ioopm_list_t *list = ioopm_linked_list_create();
   ioopm_list_iterator_t *iter = ioopm_list_iterator(list);
@@ -21,7 +28,8 @@ void test_create_destroy()
   ioopm_linked_list_destroy(list);
 }
 
-void test_has_next()
+
+static void test_has_next()
 {
   ioopm_list_t *list = ioopm_linked_list_create();
   ioopm_list_iterator_t *iter = ioopm_list_iterator(list);
@@ -33,7 +41,8 @@ void test_has_next()
   ioopm_linked_list_destroy(list);
 }
 
-void test_next()
+
+static void test_next()
 {
   ioopm_list_t *list = ioopm_linked_list_create();
   ioopm_list_iterator_t *iter = ioopm_list_iterator(list);
@@ -42,42 +51,42 @@ void test_next()
 
 }
 
-void test_remove()
+
+static void test_remove()
 {
   ioopm_list_t *list = ioopm_linked_list_create();
   ioopm_list_iterator_t *iter = ioopm_list_iterator(list);
   ioopm_iterator_destroy(iter);
   ioopm_linked_list_destroy(list);
-
 }
 
-void test_insert()
-{
-    ioopm_list_t *list = ioopm_linked_list_create();
-    ioopm_list_iterator_t *iter = ioopm_list_iterator(list);
 
-  ioopm_iterator_destroy(iter);
-  ioopm_linked_list_destroy(list);
-
-}
-
-void test_reset()
+static void test_insert()
 {
   ioopm_list_t *list = ioopm_linked_list_create();
   ioopm_list_iterator_t *iter = ioopm_list_iterator(list);
   ioopm_iterator_destroy(iter);
   ioopm_linked_list_destroy(list);
-
 }
 
-void test_current()
+
+static void test_reset()
 {
   ioopm_list_t *list = ioopm_linked_list_create();
   ioopm_list_iterator_t *iter = ioopm_list_iterator(list);
   ioopm_iterator_destroy(iter);
   ioopm_linked_list_destroy(list);
-
 }
+
+
+static void test_current()
+{
+  ioopm_list_t *list = ioopm_linked_list_create();
+  ioopm_list_iterator_t *iter = ioopm_list_iterator(list);
+  ioopm_iterator_destroy(iter);
+  ioopm_linked_list_destroy(list);
+}
+
 
 int main(void)
 {

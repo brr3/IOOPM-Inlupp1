@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "iterator.h"
 #include "linked_list.h"
 
 typedef struct node node_t;
@@ -35,34 +34,55 @@ ioopm_list_iterator_t *ioopm_list_iterator(ioopm_list_t *list)
 }
 
 
-bool iterator_has_next(ioopm_list_iterator_t *iter)
+bool ioopm_iterator_has_next(ioopm_list_iterator_t *iter)
 {
   return iter->current->next != NULL; 
 }
 
 
-elem_t iterator_get_current(ioopm_list_iterator_t *iter)
-{
-  return iter->current->next->data; 
-}
-
-
-elem_t iterator_next(ioopm_list_iterator_t *iter)
+elem_t ioopm_iterator_next(ioopm_list_iterator_t *iter)
 {
   iter->current = iter->current->next;
   return iter->current->data;
 }
 
 
-void iterator_delete(ioopm_list_iterator_t *iter)
+elem_t ioopm_iterator_remove(ioopm_list_iterator_t *iter)
 {
-  free(iter);
+  node_t *to_remove = iter->current->next; /// Cache result
+  elem_t result;
+  
+  result = to_remove->data;
+  
+  iter->current->next = to_remove->next;  /// Move forward
+  iter->list->size -= 1;
+  free(to_remove); /// Remove link
+  return result;
 }
 
 
-void iterator_reset(ioopm_list_iterator_t *iter)
+void ioopm_iterator_insert(ioopm_list_iterator_t *iter, elem_t data)
+{
+  iter->current->next = iter->current;
+  iter->current->data = data;
+}
+
+
+void ioopm_iterator_reset(ioopm_list_iterator_t *iter)
 {
   iter->current = iter->list->first;
+}
+
+
+elem_t ioopm_iterator_current(ioopm_list_iterator_t *iter)
+{
+  return iter->current->next->data; 
+}
+
+
+void ioopm_iterator_destroy(ioopm_list_iterator_t *iter)
+{
+  free(iter);
 }
 
 
@@ -76,21 +96,7 @@ elem_t iterator_remove(ioopm_list_iterator_t *iter) SEG FAULT, REDOVISNING R52
 
   free(to_remove); /// Remove link
   return result;
-} */
-
-
-elem_t iterator_remove(ioopm_list_iterator_t *iter)
-{
-  node_t *to_remove = iter->current->next; /// Cache result
-  elem_t result;
-  
-  result = to_remove->data;
-  
-  iter->current->next = to_remove->next;  /// Move forward
-  iter->list->size -= 1;
-  free(to_remove); /// Remove link
-  return result;
-} 
+} */ 
 
 
 ioopm_list_t *ioopm_linked_list_create()
@@ -201,12 +207,12 @@ elem_t ioopm_linked_list_remove(ioopm_list_t *list, int index)
   ioopm_list_iterator_t *iter = ioopm_list_iterator(list);
   for (int i = 0; i < valid_index; ++i)
     {
-      iterator_next(iter); 
+      ioopm_iterator_next(iter); 
     }
 
-  elem_t removed_data = iterator_remove(iter);
+  elem_t removed_data = ioopm_iterator_remove(iter);
 
-  iterator_delete(iter);
+  ioopm_iterator_destroy(iter);
   return removed_data;
 }
 

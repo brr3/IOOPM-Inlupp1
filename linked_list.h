@@ -1,5 +1,4 @@
-#ifndef __LINKED_LIST__
-#define __LINKED_LIST__
+#pragma once
 #include <stdbool.h>
 #include <stdlib.h>
 #include "common.h"
@@ -95,4 +94,3 @@ bool ioopm_linked_list_any(ioopm_list_t *list, bool (*prop)(elem_t, void *), voi
 /// @param fun the function to be applied
 /// @param x an additional argument (may be NULL) that will be passed to all internal calls of fun
 void ioopm_linked_apply_to_all(ioopm_list_t *list, void (*fun)(elem_t, void *), void *x);
-#endif

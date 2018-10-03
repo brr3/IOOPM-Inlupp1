@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <assert.h>
 #include <errno.h>
 #include <stdbool.h>
 #include <string.h>
@@ -8,18 +7,17 @@
 #include "CUnit/Basic.h"
 #include "linked_list.h"
 
-int elem_cmp_int(elem_t a, elem_t b)
+static int elem_cmp_int(elem_t a, elem_t b)
 {
   return b.integer - a.integer;
 }
 
-
-int init_suite(void)
+static int init_suite(void)
 {
   return 0;
 }
 
-int clean_suite(void)
+static int clean_suite(void)
 {
   return 0;
 }
