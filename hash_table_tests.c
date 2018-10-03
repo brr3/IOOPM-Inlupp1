@@ -308,6 +308,24 @@ static void test_has_key()
   ioopm_hash_table_destroy(ht);
 }
 
+static void test_resize()
+{
+  ioopm_hash_table_t *ht = ioopm_hash_table_create();
+  elem_t elem = {.string = "test"};
+  for (int i = 0; i < 170; i++)
+    {
+      ioopm_hash_table_insert(ht, i, elem);
+    }
+  //printf("Buckets size: %d\n", (int)ioopm_hash_table_buckets_size(ht));
+  CU_ASSERT_EQUAL(ioopm_hash_table_buckets_size(ht), 17);
+  for (int i = 170; i < 340; i++)
+    {
+      ioopm_hash_table_insert(ht, i, elem);
+    }
+  CU_ASSERT_EQUAL(ioopm_hash_table_buckets_size(ht), 31);
+  
+  ioopm_hash_table_destroy(ht);
+}
 
 int main(void)
 {
@@ -338,7 +356,8 @@ int main(void)
       (NULL == CU_add_test(pSuiteNW, "test of all", test_all)) ||
       (NULL == CU_add_test(pSuiteNW, "test of apply to all", test_apply_all)) ||
       (NULL == CU_add_test(pSuiteNW, "test of has_value", test_has_value)) ||
-      (NULL == CU_add_test(pSuiteNW, "test of has_key", test_has_key))
+      (NULL == CU_add_test(pSuiteNW, "test of has_key", test_has_key)) ||
+      (NULL == CU_add_test(pSuiteNW, "test of resize", test_resize))
       ) {
     CU_cleanup_registry();
     return CU_get_error();

@@ -10,6 +10,7 @@ typedef struct hash_table ioopm_hash_table_t;
 typedef bool(*ioopm_apply_function)(int key, elem_t value, void *extra);
 
 #define No_Buckets 17
+#define MAX_LOAD_FACTOR 10
 
 /// @brief Create a new hash table
 /// @return A new empty hash table
@@ -88,3 +89,7 @@ bool ioopm_hash_table_any(ioopm_hash_table_t *ht, ioopm_apply_function pred, voi
 /// @param apply_fun the function to be applied to all elements
 /// @param arg extra argument to apply_fun
 void ioopm_hash_table_apply_to_all(ioopm_hash_table_t *ht, ioopm_apply_function apply_fun, void *arg);
+
+/// @brief get the size of the buckets array. ONLY INTENDED FOR TESTING
+/// @param ht hash table operated upon.
+size_t ioopm_hash_table_buckets_size(ioopm_hash_table_t *ht);
