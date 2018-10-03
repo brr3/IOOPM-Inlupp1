@@ -32,7 +32,7 @@ memtest_iterator: test_iterator
 	valgrind --leak-check=full ./test_iterator
 
 clean:
-	rm *.o *.h.gch test_list test_hash
+	rm *.o *.h.gch test_list test_hash test_iterator error out
 
 gitadd:
 	git add *.c *.h Makefile
