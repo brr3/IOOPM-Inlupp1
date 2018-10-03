@@ -233,7 +233,7 @@ bool ioopm_linked_list_contains(ioopm_list_t *list, elem_t value, cmp_fun_t comp
 {
   for (node_t *cursor = list->first->next; cursor != NULL; cursor = cursor->next)
     {
-      if (compare_fun(cursor->data, value) == 0) return true; // compare_int_elements förbereder generalisering
+      if (compare_fun(cursor->data, value) == 0) return true;
     }
   return false;
 }

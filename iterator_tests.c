@@ -8,6 +8,7 @@
 #include "linked_list.h"
 #include "iterator.h"
 
+
 static int init_suite(void)
 {
   return 0;
@@ -46,9 +47,11 @@ static void test_next()
 {
   ioopm_list_t *list = ioopm_linked_list_create();
   ioopm_list_iterator_t *iter = ioopm_list_iterator(list);
+  elem_t elem = {.integer = 0};
+  ioopm_iterator_insert(iter, elem);
+  CU_ASSERT_TRUE(ioopm_iterator_next(iter).integer == 0);
   ioopm_iterator_destroy(iter);
   ioopm_linked_list_destroy(list);
-
 }
 
 
@@ -56,6 +59,9 @@ static void test_remove()
 {
   ioopm_list_t *list = ioopm_linked_list_create();
   ioopm_list_iterator_t *iter = ioopm_list_iterator(list);
+  //elem_t elem = {.integer = 0};
+  //ioopm_iterator_insert(iter, elem);
+  //CU_ASSERT_TRUE(ioopm_iterator_remove(iter).integer == 0);
   ioopm_iterator_destroy(iter);
   ioopm_linked_list_destroy(list);
 }
@@ -65,6 +71,13 @@ static void test_insert()
 {
   ioopm_list_t *list = ioopm_linked_list_create();
   ioopm_list_iterator_t *iter = ioopm_list_iterator(list);
+  elem_t elem;
+  for (int i = 0; i < 20; ++i)
+    {
+      elem.integer = i;
+      ioopm_iterator_insert(iter, elem);
+      CU_ASSERT_TRUE(ioopm_iterator_next(iter).integer == i);
+    }
   ioopm_iterator_destroy(iter);
   ioopm_linked_list_destroy(list);
 }
@@ -74,6 +87,15 @@ static void test_reset()
 {
   ioopm_list_t *list = ioopm_linked_list_create();
   ioopm_list_iterator_t *iter = ioopm_list_iterator(list);
+  elem_t elem = {.integer = 0};
+  ioopm_iterator_insert(iter, elem);
+  CU_ASSERT_TRUE(ioopm_iterator_current(iter).integer == 0);
+  elem.integer = 1;
+  ioopm_iterator_insert(iter, elem);
+  CU_ASSERT_TRUE(ioopm_iterator_current(iter).integer == 1);  
+  CU_ASSERT_TRUE(ioopm_iterator_next(iter).integer == 0); 
+  ioopm_iterator_reset(iter);
+  CU_ASSERT_TRUE(ioopm_iterator_current(iter).integer == 1);
   ioopm_iterator_destroy(iter);
   ioopm_linked_list_destroy(list);
 }
@@ -83,6 +105,9 @@ static void test_current()
 {
   ioopm_list_t *list = ioopm_linked_list_create();
   ioopm_list_iterator_t *iter = ioopm_list_iterator(list);
+  elem_t elem = {.integer = 0};
+  ioopm_iterator_insert(iter, elem);
+  CU_ASSERT_TRUE(ioopm_iterator_current(iter).integer == 0);
   ioopm_iterator_destroy(iter);
   ioopm_linked_list_destroy(list);
 }
