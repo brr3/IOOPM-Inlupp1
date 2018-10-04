@@ -11,10 +11,11 @@ typedef struct hash_table ioopm_hash_table_t;
 #define MAX_LOAD_FACTOR 10
 
 /// @brief Create a new hash table
-/// @param hash_function hash function to convert keys
-/// @param compare_function function to compare the keys  
+/// @param hash_function hash function to convert keys to a hash code
+/// @param compare_key_function function to compare the keys
+/// @param compare_value_function function to compare the values
 /// @return A new empty hash table
-ioopm_hash_table_t *ioopm_hash_table_create(ioopm_hash_function hash_function, ioopm_apply_function compare_function);
+ioopm_hash_table_t *ioopm_hash_table_create(ioopm_hash_function hash_function, ioopm_apply_function compare_key_function, ioopm_apply_function compare_value_func);
 
 /// @brief add key => value entry in hash table ht
 /// @param ht hash table operated upon
