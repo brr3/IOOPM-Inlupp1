@@ -15,19 +15,20 @@ int init_suite(void)
   return 0;
 }
 
+
 int clean_suite(void)
 {
   return 0;
 }
 
 
-int extract_int_hash_key(elem_t key)
+static int extract_int_hash_key(elem_t key)
 {
   return key.integer; 
 }
 
 
-bool cmp_int(elem_t key, elem_t value_ignored, void *x)
+static bool cmp_int(elem_t key, elem_t value_ignored, void *x)
 {
   return key.integer - *(int*)x == 0;
 }

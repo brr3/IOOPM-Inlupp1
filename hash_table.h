@@ -15,7 +15,7 @@ typedef struct hash_table ioopm_hash_table_t;
 /// @param compare_key_function function to compare the keys
 /// @param compare_value_function function to compare the values
 /// @return A new empty hash table
-ioopm_hash_table_t *ioopm_hash_table_create(ioopm_hash_function hash_function, ioopm_apply_function compare_key_function, ioopm_apply_function compare_value_func);
+ioopm_hash_table_t *ioopm_hash_table_create(ioopm_hash_function hash_function, ioopm_apply_function compare_key_func, ioopm_apply_function compare_value_func);
 
 /// @brief add key => value entry in hash table ht
 /// @param ht hash table operated upon
@@ -26,13 +26,13 @@ void ioopm_hash_table_insert(ioopm_hash_table_t *ht, elem_t key, elem_t value);
 /// @brief lookup value for key in hash table ht
 /// @param ht hash table operated upon
 /// @param key key to lookup
-/// @return the value mapped to by key (temporary: return the pointer to the value mapped to by key)
+/// @return the pointer to the value mapped to by key, NULL if the key doesn't exist.
 elem_t *ioopm_hash_table_lookup(ioopm_hash_table_t *ht, elem_t key);
 
 /// @brief remove any mapping from key to a value
 /// @param ht hash table operated upon
 /// @param key key to remove
-/// @return the value mapped to by key
+/// @return the value mapped to by key, NULL if the key doesn't exist.
 elem_t ioopm_hash_table_remove(ioopm_hash_table_t *ht, elem_t key);
 
 /// @brief destroy the entire hash table and its entries

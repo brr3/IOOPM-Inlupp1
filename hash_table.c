@@ -40,7 +40,7 @@ ioopm_hash_table_t *ioopm_hash_table_create(ioopm_hash_function hash_function, i
 }
 
 
-static entry_t *find_previous_entry_for_key(entry_t *address, elem_t key, ioopm_apply_function compare_func)
+static entry_t *find_previous_entry_for_key(entry_t *address, elem_t key, ioopm_apply_function compare_key)
 {
   entry_t *first_entry    = address; 
   entry_t *next_entry     = first_entry->next;
@@ -48,7 +48,7 @@ static entry_t *find_previous_entry_for_key(entry_t *address, elem_t key, ioopm_
   
   while (next_entry != NULL)
     {
-      if (compare_func(key, previous_entry->value, &next_entry->key))
+      if (compare_key(key, next_entry->value, &next_entry->key))
         {
           return previous_entry;
         }
@@ -71,17 +71,20 @@ static entry_t *entry_create(elem_t key, elem_t value, entry_t *next)
 
 static void modulo(int *a, int b)
 {
-  if (*a < 0)
-    {
-      while (*a < 0)
-        {
-          *a = b + *a;
-        }
-    }
-  else
-    {
-      *a = *a % b;
-    }
+  *a = abs(*a) % b;
+  /*
+    if (*a < 0)
+      {
+        while(*a < 0)
+          {
+            *a = b + *a
+          }
+      }
+    else
+      {
+        *a = *a % b;
+      }
+  */
 }
 
 
@@ -164,7 +167,7 @@ elem_t *ioopm_hash_table_lookup(ioopm_hash_table_t *ht, elem_t key)
     }
   else
     {
-      return NULL; 
+      return NULL;
     }
 }
 
@@ -283,7 +286,6 @@ ioopm_list_t *ioopm_hash_table_values(ioopm_hash_table_t *ht)
   return values;
 }
 
-
 bool ioopm_hash_table_has_key(ioopm_hash_table_t *ht, elem_t key)
 {
   return ioopm_hash_table_any(ht, ht->compare_key_func, &key);
@@ -335,7 +337,7 @@ bool ioopm_hash_table_any(ioopm_hash_table_t *h, ioopm_apply_function pred, void
 
 void ioopm_hash_table_apply_to_all(ioopm_hash_table_t *h, ioopm_apply_function apply_fun, void *arg)
 {
-  for (int i = 0; i < h->buckets_size; ++i)
+  for (size_t i = 0; i < h->buckets_size; ++i)
     {
       entry_t *temp = &h->buckets[i];
       entry_t *next = temp->next;
