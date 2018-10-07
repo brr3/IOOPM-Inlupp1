@@ -59,9 +59,9 @@ static void test_remove()
 {
   ioopm_list_t *list = ioopm_linked_list_create();
   ioopm_list_iterator_t *iter = ioopm_list_iterator(list);
-  //elem_t elem = {.integer = 0};
-  //ioopm_iterator_insert(iter, elem);
-  //CU_ASSERT_TRUE(ioopm_iterator_remove(iter).integer == 0);
+  elem_t elem = {.integer = 0};
+  ioopm_iterator_insert(iter, elem);
+  CU_ASSERT_TRUE(ioopm_iterator_remove(iter).integer == 0);
   ioopm_iterator_destroy(iter);
   ioopm_linked_list_destroy(list);
 }
@@ -88,13 +88,11 @@ static void test_reset()
   ioopm_list_t *list = ioopm_linked_list_create();
   ioopm_list_iterator_t *iter = ioopm_list_iterator(list);
   elem_t elem = {.integer = 0};
-
   for (int i = 0; i < 20; ++i)
     {
       elem.integer = i;
       ioopm_iterator_insert(iter, elem);
     }
-
   CU_ASSERT_EQUAL(ioopm_iterator_current(iter).integer, 19);
   for (int i = 0; i < 20; i++)
     {
@@ -102,9 +100,6 @@ static void test_reset()
     }
   ioopm_iterator_reset(iter);
   CU_ASSERT_EQUAL(ioopm_iterator_current(iter).integer, 19);
-
-  
-  
   ioopm_iterator_destroy(iter);
   ioopm_linked_list_destroy(list);
 }
@@ -116,6 +111,10 @@ static void test_current()
   ioopm_list_iterator_t *iter = ioopm_list_iterator(list);
   elem_t elem = {.integer = 0};
   ioopm_iterator_insert(iter, elem);
+  CU_ASSERT_TRUE(ioopm_iterator_current(iter).integer == 0);
+  ioopm_iterator_next(iter);
+  CU_ASSERT_TRUE(ioopm_iterator_current(iter).void_ptr == NULL);
+  ioopm_iterator_reset(iter);
   CU_ASSERT_TRUE(ioopm_iterator_current(iter).integer == 0);
   ioopm_iterator_destroy(iter);
   ioopm_linked_list_destroy(list);

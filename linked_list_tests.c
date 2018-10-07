@@ -7,6 +7,7 @@
 #include "CUnit/Basic.h"
 #include "linked_list.h"
 
+
 static int elem_cmp_int(elem_t a, elem_t b)
 {
   return b.integer - a.integer;
@@ -120,6 +121,17 @@ static void test_remove()
 }
 
 
+static void test_get()
+{
+  ioopm_list_t *list = ioopm_linked_list_create();
+  elem_t elem = {.integer = 0};
+  ioopm_linked_list_insert(list, 0, elem);
+  CU_ASSERT_TRUE(ioopm_linked_list_get(list, 0).integer == 0);
+  ioopm_linked_list_get(list, 1);
+  ioopm_linked_list_destroy(list);  
+}
+
+
 static void test_size()
 {
   ioopm_list_t *list = ioopm_linked_list_create();
@@ -128,7 +140,7 @@ static void test_size()
     {
       elem.integer = i;
       ioopm_linked_list_insert(list, i, elem);
-      CU_ASSERT_TRUE(ioopm_linked_list_size(list) == i + 1);
+      CU_ASSERT_TRUE(ioopm_linked_list_size(list) ==  i + 1);
     }
   ioopm_linked_list_destroy(list);
 }
@@ -157,12 +169,14 @@ static void test_clear()
   ioopm_linked_list_destroy(list);
 }
 
+
 static bool less_than(elem_t a, void *b)
 {
   return a.integer < ((elem_t *)b)->integer ? true : false;
 }
 
-static void test_list_all() // TODO
+
+static void test_list_all()
 {
   ioopm_list_t *list = ioopm_linked_list_create();
   elem_t elem = {.integer = 0};
@@ -179,12 +193,14 @@ static void test_list_all() // TODO
   ioopm_linked_list_destroy(list);
 }
 
+
 static bool is_divisor_of(elem_t a, void *b)
 {
   return !(a.integer % ((elem_t *)b)->integer);
 }
 
-static void test_list_any() // TODO
+
+static void test_list_any()
 {
   ioopm_list_t *list = ioopm_linked_list_create();
   elem_t elem = {.integer = 0};
@@ -201,12 +217,14 @@ static void test_list_any() // TODO
   ioopm_linked_list_destroy(list);  
 }
 
+
 static void fun_sum(elem_t a, void *b)
 {
   *(int *)b += a.integer;
 }
 
-static void test_apply_to_all() // TODO 
+
+static void test_apply_to_all()
 {
   ioopm_list_t *list = ioopm_linked_list_create();
   elem_t elem = {.integer = 0};
@@ -243,6 +261,7 @@ int main(void)
       (NULL == CU_add_test(pSuiteNW, "test of insert: append", test_insert_append)) ||
       (NULL == CU_add_test(pSuiteNW, "test of insert: insert", test_insert_insert)) ||
       (NULL == CU_add_test(pSuiteNW, "test of remove", test_remove)) ||
+      (NULL == CU_add_test(pSuiteNW, "test of get", test_get)) ||
       (NULL == CU_add_test(pSuiteNW, "test of size", test_size)) ||
       (NULL == CU_add_test(pSuiteNW, "test of is_empty", test_is_empty)) ||
       (NULL == CU_add_test(pSuiteNW, "test of clear", test_clear)) ||

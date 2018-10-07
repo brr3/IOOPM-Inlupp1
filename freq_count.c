@@ -4,7 +4,9 @@
 #include <string.h>
 #include "hash_table.h"
 
+
 #define Delimiters "+-#@()[]{}.,:;!? \t\n\r"
+
 
 int cmpstringp(const void *p1, const void *p2)
 {
@@ -87,11 +89,13 @@ void process_file(char *filename, ioopm_hash_table_t *ht)
   fclose(f);
 }
 
+
 bool word_print(elem_t key, elem_t value, void *arg)
 {
   printf("Word: %s\nCount: %d\n", key.string, value.integer);
   return true;
 }
+
 
 int main(int argc, char *argv[])
 {

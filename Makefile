@@ -1,6 +1,6 @@
 COMPILER = gcc
 OPTIONS = -g -Wall -pedantic
-LINKOPTIONS = -lcunit	-pg
+LINKOPTIONS = -lcunit
 
 test_hash: hash_table.o linked_list.o hash_table_tests.c
 	$(COMPILER) $(OPTIONS) hash_table.o hash_table_tests.c linked_list.o -o test_hash $(LINKOPTIONS)
@@ -35,8 +35,7 @@ clean:
 	rm *.o *.h.gch test_list test_hash test_iterator error out
 
 gitadd:
-	git add *.c *.h Makefile
-
+	git add *.c *.h *.md Makefile
 
 freq_count: freq_count.c linked_list.o hash_table.o
 	$(COMPILER) $(OPTIONS) hash_table.o freq_count.c linked_list.o -o freq_count $(LINKOPTIONS)
