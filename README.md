@@ -13,7 +13,7 @@ Run:
 ./test_iterator
 
 Performance tests:
-All tests done w/o printing the words & frequency in freq_count.c
+All tests done without printing the words & frequency in freq_count.c
 Max load factor = 10
 
 bigbigbig.txt (bigger than all provided files)
