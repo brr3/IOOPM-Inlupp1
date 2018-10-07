@@ -13,7 +13,7 @@ struct entry
 
 struct hash_table
 {
-  entry_t *buckets;
+  entry_t *buckets; // OPTIMERA FÖR MÅL O44
   size_t buckets_size;
   ioopm_hash_function hash_function;
   ioopm_apply_function compare_key_func;
@@ -233,7 +233,7 @@ void ioopm_hash_table_clear(ioopm_hash_table_t *ht)
 } 
 
 
-ioopm_list_t *ioopm_hash_table_keys(ioopm_hash_table_t *ht)
+ioopm_list_t *ioopm_hash_table_keys(ioopm_hash_table_t *ht) // OPTIMERA FÖR MÅL O43
 {
   ioopm_list_t *keys = ioopm_linked_list_create();
   elem_t elem;

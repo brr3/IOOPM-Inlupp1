@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
         {
           process_file(argv[i], ht);
         }
-
+      /*
       ioopm_list_t *keys = ioopm_hash_table_keys(ht);
       int arr_size = ioopm_linked_list_size(keys);
       char *arr[arr_size];
@@ -116,16 +116,12 @@ int main(int argc, char *argv[])
         {
           arr[i] = ioopm_linked_list_remove(keys, 0).string; 
         }
-
       sort_keys(arr, (size_t)arr_size);
       for (int i = 0; i < arr_size; i++)
         {
           puts(arr[i]);
         }
-
-      //ioopm_hash_table_apply_to_all(ht, word_print, NULL);
-      
-      ioopm_hash_table_destroy(ht);
+      ioopm_hash_table_destroy(ht);*/
     }
   else
     {
