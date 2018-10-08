@@ -178,12 +178,7 @@ static node_t *list_inner_find_previous(node_t *first_node, int index)
 
 static int list_inner_adjust_index(int index, int upper_bound)
 {
-  if (abs(index) >= upper_bound)
-    {
-      index = upper_bound - 1;
-      return index;
-    }
-  return abs(index);
+  return abs(index) % upper_bound;
 }
 
 

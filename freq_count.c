@@ -97,6 +97,13 @@ bool word_print(elem_t key, elem_t value, void *arg)
 }
 
 
+bool free_keys_from_hash_table(elem_t key, elem_t value_ignored, void *ignored)
+{
+  free(key.string);
+  return true;
+}
+
+
 int main(int argc, char *argv[])
 {
   ioopm_hash_table_t *ht = ioopm_hash_table_create(hash_string, cmp_string, cmp_int);
@@ -107,55 +114,34 @@ int main(int argc, char *argv[])
         {
           process_file(argv[i], ht);
         }
-      /*
-      ioopm_list_t *keys = ioopm_hash_table_keys(ht);
-      int arr_size = ioopm_linked_list_size(keys);
-      char *arr[arr_size];
+      
+      ioopm_list_t *words = ioopm_hash_table_keys(ht);
+      int arr_size = ioopm_linked_list_size(words);
+      char *arr_words[arr_size];
       
       for (int i = 0; i < arr_size; i++)
         {
-          arr[i] = ioopm_linked_list_remove(keys, 0).string; 
+          arr_words[i] = ioopm_linked_list_remove(words, 0).string; 
         }
-      sort_keys(arr, (size_t)arr_size);
+      sort_keys(arr_words, (size_t)arr_size);
+
+      int arr_count[arr_size];
       for (int i = 0; i < arr_size; i++)
         {
-          puts(arr[i]);
+          elem_t temp = {.string = arr_words[i]};
+          arr_count[i] = ioopm_hash_table_lookup(ht, temp)->integer;
         }
-      ioopm_hash_table_destroy(ht);*/
+      
+      for (int i = 0; i < arr_size; i++)
+        {
+          printf("%s: %d\n", arr_words[i], arr_count[i]);
+        }
+      ioopm_hash_table_apply_to_all(ht, free_keys_from_hash_table, NULL);
+      ioopm_hash_table_destroy(ht);
     }
   else
     {
       puts("Usage: freq-count file1 ... filen");
     }
-}
-
-
-
-
-
-
-
-
-typedef struct q_elem q_elem_t;
-struct q_elem {
-  char *key;
-  int count;
-};
-
-typedef struct help_struct help_struct_t;
-struct help_struct{
-  q_elem_t *array;
-  int cursor;
-  int size;
-};
-
-
-bool entries_to_array(elem_t key, elem_t value, void *arg)
-{
-  q_elem_t temp;
-  temp.key = key.string;
-  temp.count = value.integer;
-  ((help_struct_t *)arg)->array[((help_struct_t *)arg)->cursor] = temp; 
-  return true;
 }
 
