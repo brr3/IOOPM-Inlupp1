@@ -22,7 +22,7 @@ Run:
 Performance tests:
 All tests done without printing the words & frequency in freq_count.c
 
-bigbigbig.txt (bigger than all provided files)
+bigbigbig.txt (6 MB)
 
 Max load factor = 10
 
