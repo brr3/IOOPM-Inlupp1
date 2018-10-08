@@ -6,7 +6,7 @@
 #include <ctype.h>
 #include "CUnit/Basic.h"
 #include "linked_list.h"
-
+#include "iterator.h"
 
 static int elem_cmp_int(elem_t a, elem_t b)
 {
@@ -21,6 +21,106 @@ static int init_suite(void)
 static int clean_suite(void)
 {
   return 0;
+}
+
+static void test_iterator_create_destroy()
+{
+  ioopm_list_t *list = ioopm_linked_list_create();
+  ioopm_list_iterator_t *iter = ioopm_list_iterator(list);
+  CU_ASSERT_PTR_NOT_NULL(iter);
+  ioopm_iterator_destroy(iter);
+  ioopm_linked_list_destroy(list);
+}
+
+
+static void test_iterator_has_next()
+{
+  ioopm_list_t *list = ioopm_linked_list_create();
+  ioopm_list_iterator_t *iter = ioopm_list_iterator(list);
+  CU_ASSERT_FALSE(ioopm_iterator_has_next(iter));
+  elem_t elem = {.integer = 0};
+  ioopm_iterator_insert(iter, elem);
+  CU_ASSERT_TRUE(ioopm_iterator_has_next(iter));
+  ioopm_iterator_destroy(iter);
+  ioopm_linked_list_destroy(list);
+}
+
+
+static void test_iterator_next()
+{
+  ioopm_list_t *list = ioopm_linked_list_create();
+  ioopm_list_iterator_t *iter = ioopm_list_iterator(list);
+  elem_t elem = {.integer = 0};
+  ioopm_iterator_insert(iter, elem);
+  CU_ASSERT_TRUE(ioopm_iterator_next(iter).integer == 0);
+  ioopm_iterator_destroy(iter);
+  ioopm_linked_list_destroy(list);
+}
+
+
+static void test_iterator_remove()
+{
+  ioopm_list_t *list = ioopm_linked_list_create();
+  ioopm_list_iterator_t *iter = ioopm_list_iterator(list);
+  elem_t elem = {.integer = 0};
+  ioopm_iterator_insert(iter, elem);
+  CU_ASSERT_TRUE(ioopm_iterator_remove(iter).integer == 0);
+  ioopm_iterator_destroy(iter);
+  ioopm_linked_list_destroy(list);
+}
+
+
+static void test_iterator_insert()
+{
+  ioopm_list_t *list = ioopm_linked_list_create();
+  ioopm_list_iterator_t *iter = ioopm_list_iterator(list);
+  elem_t elem;
+  for (int i = 0; i < 20; ++i)
+    {
+      elem.integer = i;
+      ioopm_iterator_insert(iter, elem);
+      CU_ASSERT_TRUE(ioopm_iterator_next(iter).integer == i);
+    }
+  ioopm_iterator_destroy(iter);
+  ioopm_linked_list_destroy(list);
+}
+
+
+static void test_iterator_reset()
+{
+  ioopm_list_t *list = ioopm_linked_list_create();
+  ioopm_list_iterator_t *iter = ioopm_list_iterator(list);
+  elem_t elem = {.integer = 0};
+  for (int i = 0; i < 20; ++i)
+    {
+      elem.integer = i;
+      ioopm_iterator_insert(iter, elem);
+    }
+  CU_ASSERT_EQUAL(ioopm_iterator_current(iter).integer, 19);
+  for (int i = 0; i < 20; i++)
+    {
+      CU_ASSERT_EQUAL(ioopm_iterator_next(iter).integer, 19 - i);
+    }
+  ioopm_iterator_reset(iter);
+  CU_ASSERT_EQUAL(ioopm_iterator_current(iter).integer, 19);
+  ioopm_iterator_destroy(iter);
+  ioopm_linked_list_destroy(list);
+}
+
+
+static void test_iterator_current()
+{
+  ioopm_list_t *list = ioopm_linked_list_create();
+  ioopm_list_iterator_t *iter = ioopm_list_iterator(list);
+  elem_t elem = {.integer = 0};
+  ioopm_iterator_insert(iter, elem);
+  CU_ASSERT_TRUE(ioopm_iterator_current(iter).integer == 0);
+  ioopm_iterator_next(iter);
+  CU_ASSERT_TRUE(ioopm_iterator_current(iter).void_ptr == NULL);
+  ioopm_iterator_reset(iter);
+  CU_ASSERT_TRUE(ioopm_iterator_current(iter).integer == 0);
+  ioopm_iterator_destroy(iter);
+  ioopm_linked_list_destroy(list);
 }
 
 
@@ -267,7 +367,15 @@ int main(void)
       (NULL == CU_add_test(pSuiteNW, "test of clear", test_clear)) ||
       (NULL == CU_add_test(pSuiteNW, "test of all", test_list_all)) ||
       (NULL == CU_add_test(pSuiteNW, "test of any", test_list_any)) ||
-      (NULL == CU_add_test(pSuiteNW, "test of apply all", test_apply_to_all))
+      (NULL == CU_add_test(pSuiteNW, "test of apply all", test_apply_to_all)) ||
+      (NULL == CU_add_test(pSuiteNW, "test_iterator of create/destroy", test_iterator_create_destroy)) ||
+      (NULL == CU_add_test(pSuiteNW, "test_iterator of has_next", test_iterator_has_next)) ||
+      (NULL == CU_add_test(pSuiteNW, "test_iterator of next", test_iterator_next)) ||
+      (NULL == CU_add_test(pSuiteNW, "test_iterator of remove", test_iterator_remove)) ||
+      (NULL == CU_add_test(pSuiteNW, "test_iterator of insert", test_iterator_insert)) ||
+      (NULL == CU_add_test(pSuiteNW, "test_iterator of reset", test_iterator_reset)) ||
+      (NULL == CU_add_test(pSuiteNW, "test_iterator of current", test_iterator_current))       
+
       ) {
     CU_cleanup_registry();
     return CU_get_error();

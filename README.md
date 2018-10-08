@@ -18,3 +18,13 @@ Run:
 ./test_list
 ./test_iterator
 ./fulltest
+
+
+=========COVERAGE TESTS==========
+hash_table.c
+Lines executed:100.00% of 166
+Branches executed:100.00% of 49
+
+linked_list.c
+Lines executed:97.50% of 120
+Branches executed:100.00% of 32
