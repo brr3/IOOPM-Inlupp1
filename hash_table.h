@@ -32,7 +32,7 @@ elem_t *ioopm_hash_table_lookup(ioopm_hash_table_t *ht, elem_t key);
 /// @brief remove any mapping from key to a value
 /// @param ht  | hash table operated upon
 /// @param key | key to remove
-/// @return the element mapped to by key, or NULL if the key doesn't exist
+/// @return the element mapped to by key, or an empty elem_t if the key doesn't exist
 elem_t ioopm_hash_table_remove(ioopm_hash_table_t *ht, elem_t key);
 
 /// @brief destroy the entire hash table and its entries
