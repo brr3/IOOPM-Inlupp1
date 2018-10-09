@@ -6,7 +6,7 @@ Authors: Bruno Rees, Alicia Nilsson, Henrik Johansson
 make test_hash
 make test_list
 make test_iterator
-make freq_count // example program
+make freq_count // word processing program
 
 =========MEMORY TESTS==========
 make memtest_hash
@@ -24,6 +24,9 @@ make fulltest // build and run all of the above tests immediately
 
 =========FAILURE HANDLING==========
 All public functions found in the header files that may fail, for example when trying to remove an element from the hash table that does not exist, will return an "empty" (newly initiated) element of type elem_t (i.e. void_ptr set to NULL, see common.h).
+
+=========OTHER NOTES==========
+iterator.h is necessary for linked_list.c and linked_list_tests.c to successfully compile.
 
 =========COVERAGE TESTS==========
 hash_table.c
