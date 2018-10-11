@@ -27,25 +27,33 @@ void ioopm_linked_list_append(ioopm_list_t *list, elem_t element);
 void ioopm_linked_list_prepend(ioopm_list_t *list, elem_t element);
 
 /// @brief Insert an element into a linked list in O(n) time.
-/// The valid values of index are [0,n] for a list of n elements,
-/// where 0 means before the first element and n means after
-/// the last element.
+/// The default values of index are [0,n-1] for a list of n elements,
+/// where 0 means the first element and n means after the last element. 
+/// You may also use indexes below 0 and above n-1 to wrap around the list.
+/// Negative numbers will wrap around to the end of the list while
+/// positive numbers above n-1 will wrap around to the beginning of the list.
 /// @param list    | the linked list that will be extended
 /// @param index   | the position in the list
 /// @param element | the element to be inserted
 void ioopm_linked_list_insert(ioopm_list_t *list, int index, elem_t element);
 
 /// @brief Remove an element from a linked list in O(n) time.
-/// The valid values of index are [0,n-1] for a list of n elements,
-/// where 0 means the first element and n-1 means the last element.
+/// The default values of index are [0,n-1] for a list of n elements,
+/// where 0 means the first element and n-1 means the last element. 
+/// You may also use indexes below 0 and above n-1 to wrap around the list.
+/// Negative numbers will wrap around to the end of the list while
+/// positive numbers above n-1 will wrap around to the beginning of the list.
 /// @param list  | the linked list that will be reducted
 /// @param index | the position in the list
 /// @return the element that was removed, or an empty elem_t if there is no element at given index
 elem_t ioopm_linked_list_remove(ioopm_list_t *list, int index);
 
 /// @brief Retrieve an element from a linked list in O(n) time.
-/// The valid values of index are [0,n-1] for a list of n elements,
-/// where 0 means the first element and n-1 means the last element.
+/// The default values of index are [0,n-1] for a list of n elements,
+/// where 0 means the first element and n-1 means the last element. 
+/// You may also use indexes below 0 and above n-1 to wrap around the list.
+/// Negative numbers will wrap around to the end of the list while
+/// positive numbers above n-1 will wrap around to the beginning of the list.
 /// @param list  | the linked list that will be extended
 /// @param index | the position in the list
 /// @return the element at given index, or an empty elem_t if there is no element at given index
