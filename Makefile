@@ -14,7 +14,7 @@ hash_table.o: hash_table.c hash_table.h
 linked_list.o: linked_list.c linked_list.h
 	$(COMPILER) $(OPTIONS) -c linked_list.c linked_list.h $(LINKOPTIONS)
 
-fulltest: test_list test_hash test_iterator
+fulltest: test_list test_hash
 	./test_list
 	./test_hash
 
