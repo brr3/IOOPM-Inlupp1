@@ -5,18 +5,15 @@ Authors: Bruno Rees, Alicia Nilsson, Henrik Johansson
 =========BUILD==========
 make test_hash
 make test_list
-make test_iterator
 make freq_count // word processing program
 
 =========MEMORY TESTS==========
 make memtest_hash
 make memtest_list
-make memtest_iterator
 
 =========RUN TESTS==========
 ./test_hash
 ./test_list
-./test_iterator
 make fulltest // build and run all of the above tests immediately
 
 =========RUN WORD PROCESSING PROGRAM==========
