@@ -230,7 +230,8 @@ elem_t ioopm_linked_list_get(ioopm_list_t *list, int index)
     }
   else
     {
-      return (elem_t) {.void_ptr = NULL};
+      elem_t null_elem = { };
+      return null_elem;
     }
 }
 
