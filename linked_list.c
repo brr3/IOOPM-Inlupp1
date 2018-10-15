@@ -121,7 +121,8 @@ elem_t ioopm_iterator_current(ioopm_list_iterator_t *iter)
     }
   else
     {
-      return (elem_t) {.void_ptr = NULL};
+      elem_t null_elem = { };
+      return null_elem;
     }
 }
 
