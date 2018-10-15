@@ -72,7 +72,7 @@ elem_t ioopm_iterator_remove(ioopm_list_iterator_t *iter)
   if (ioopm_iterator_has_next(iter))
     {
       node_t *to_remove = iter->current->next;
-      elem_t result;
+      elem_t result = { };
       result = to_remove->data;
       
       iter->current->next = to_remove->next; 
