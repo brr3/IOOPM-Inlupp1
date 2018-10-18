@@ -3,6 +3,7 @@
 #include <string.h>
 #include "hash_table.h"
 
+typedef struct entry entry_t;
 
 struct entry
 {
