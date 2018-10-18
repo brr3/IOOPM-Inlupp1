@@ -152,7 +152,8 @@ elem_t *ioopm_hash_table_lookup(ioopm_hash_table_t *ht, elem_t key)
     }
   else
     {
-      return NULL;
+      elem_t null_elem = { .void_ptr = NULL };
+      return null_elem;
     }
 }
 
