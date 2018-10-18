@@ -87,19 +87,6 @@ elem_t ioopm_iterator_remove(ioopm_list_iterator_t *iter)
     }
 }
 
-
- /*elem_t ioopm_iterator_remove(ioopm_list_iterator_t *iter) //SEG FAULT, REDOVISNING R52
-{
-  node_t *to_remove = iter->current->next; /// Cache result
-  elem_t result = to_remove->data;
-  
-  iter->current->next = to_remove->next;  /// Move forward
-
-  free(to_remove); /// Remove link
-  return result;
-} */
-
-
 void ioopm_iterator_insert(ioopm_list_iterator_t *iter, elem_t data)
 {
   iter->current->next = link_new(data, iter->current->next);
