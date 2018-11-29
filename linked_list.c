@@ -62,7 +62,8 @@ elem_t ioopm_iterator_next(ioopm_list_iterator_t *iter)
     }
   else
     {
-      return (elem_t) {.void_ptr = NULL};
+      elem_t null_elem = { .void_ptr = NULL };
+      return null_elem;
     }
 }
 
@@ -72,7 +73,7 @@ elem_t ioopm_iterator_remove(ioopm_list_iterator_t *iter)
   if (ioopm_iterator_has_next(iter))
     {
       node_t *to_remove = iter->current->next;
-      elem_t result;
+      elem_t result = { };
       result = to_remove->data;
       
       iter->current->next = to_remove->next; 
@@ -83,10 +84,10 @@ elem_t ioopm_iterator_remove(ioopm_list_iterator_t *iter)
     }
   else
     {
-      return (elem_t) {.void_ptr = NULL};
+      elem_t null_elem = { .void_ptr = NULL };
+      return null_elem;
     }
 }
-
 
 void ioopm_iterator_insert(ioopm_list_iterator_t *iter, elem_t data)
 {
@@ -118,18 +119,6 @@ void ioopm_iterator_destroy(ioopm_list_iterator_t *iter)
 {
   free(iter);
 }
-
-
-/*elem_t iterator_remove(ioopm_list_iterator_t *iter) SEG FAULT, REDOVISNING R52
-{
-  node_t *to_remove = iter->current->next; /// Cache result
-  elem_t result = to_remove->data;
-  
-  iter->current->next = to_remove->next;  /// Move forward
-
-  free(to_remove); /// Remove link
-  return result;
-} */ 
 
 
 ioopm_list_t *ioopm_linked_list_create()

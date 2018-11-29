@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
       
       ioopm_list_t *words = ioopm_hash_table_keys(ht);
       int arr_size = ioopm_linked_list_size(words);
-      char *arr_words[arr_size];
+      char *arr_words[arr_size]; // DUBBELPEKARE M39
       
       for (int i = 0; i < arr_size; i++)
         {

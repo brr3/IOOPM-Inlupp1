@@ -3,6 +3,7 @@
 #include <string.h>
 #include "hash_table.h"
 
+typedef struct entry entry_t;
 
 struct entry
 {
@@ -21,9 +22,9 @@ struct hash_table
   size_t size;
 };
 
-static size_t primes[] = {17, 31, 67, 127, 257, 509, 1021, 2053, 4099, 8191, 16381, 32749, 65521, 131071, 262139, 524287, 1048573, 2097143, 4194301, 8388593, 16777213, 33554393};
+static const size_t primes[] = {17, 31, 67, 127, 257, 509, 1021, 2053, 4099, 8191, 16381, 32749, 65521, 131071, 262139, 524287, 1048573, 2097143, 4194301, 8388593, 16777213, 33554393};
 
-static int num_primes  = 22;
+static const int num_primes  = 22;
 
 
 ioopm_hash_table_t *ioopm_hash_table_create(ioopm_hash_function hash_function, ioopm_apply_function compare_key_func, ioopm_apply_function compare_value_func)
@@ -68,8 +69,9 @@ static entry_t *entry_create(elem_t key, elem_t value, entry_t *next)
 }
 
 
-static void modulo(int *a, int b)
+static void modulo(int *a, int b) // MÅL H20
 {
+  //return abs(a) % b;
   *a = abs(*a) % b;
 }
 

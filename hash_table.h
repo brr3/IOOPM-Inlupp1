@@ -4,7 +4,6 @@
 #include "common.h"
 #include "linked_list.h"
 
-typedef struct entry entry_t;
 typedef struct hash_table ioopm_hash_table_t;
 
 #define No_Buckets 17 // ONLY USED IN TEST FILE
