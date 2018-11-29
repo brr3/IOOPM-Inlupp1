@@ -83,7 +83,7 @@ void process_file(char *filename, ioopm_hash_table_t *ht)
         {
           process_word(word, ht);
         }
-
+      
       free(buf);
     }  
   fclose(f);
