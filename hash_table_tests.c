@@ -323,13 +323,13 @@ static void test_resize()
   ioopm_hash_table_t *ht = ioopm_hash_table_create(extract_int_hash_key, cmp_int, cmp_string);
   elem_t elem = {.string = "test"};
   elem_t key  = {.integer = 0};
-  for (int i = 0; i < 170; i++)
+  for (int i = 0; i < 17*MAX_LOAD_FACTOR; i++)
     {
       key.integer = i;
       ioopm_hash_table_insert(ht, key, elem);
     }
   CU_ASSERT_EQUAL(ioopm_hash_table_buckets_size(ht), 17);
-  for (int i = 170; i < 340; i++)
+  for (int i = 17*MAX_LOAD_FACTOR; i < 50*MAX_LOAD_FACTOR; i++)
     {
       key.integer = i;
       ioopm_hash_table_insert(ht, key, elem);

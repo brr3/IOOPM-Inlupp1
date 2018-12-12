@@ -1,5 +1,5 @@
 COMPILER = gcc
-OPTIONS = -g -Wall -pedantic
+OPTIONS = -pg -g
 LINKOPTIONS = -lcunit
 
 test_hash: hash_table.o linked_list.o hash_table_tests.c

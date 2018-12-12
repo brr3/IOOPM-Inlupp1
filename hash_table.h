@@ -6,8 +6,8 @@
 
 typedef struct hash_table ioopm_hash_table_t;
 
-#define No_Buckets 17 // ONLY USED IN TEST FILE
-#define MAX_LOAD_FACTOR 10
+#define No_Buckets 17 //ONLY USED IN TEST FILE AND DOES NOT REFLECT ACTUAL NUMBER OF BUCKETS
+#define MAX_LOAD_FACTOR 1
 
 /// @brief Create a new hash table
 /// @param hash_function          | hash function to convert keys to a hash code

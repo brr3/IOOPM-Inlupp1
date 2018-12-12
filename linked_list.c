@@ -144,13 +144,21 @@ void ioopm_linked_list_destroy(ioopm_list_t *list)
 
 void ioopm_linked_list_append(ioopm_list_t *list, elem_t value)
 {
-  ioopm_linked_list_insert(list, ioopm_linked_list_size(list), value);
+  list->last->next = link_new(value, NULL);
+  list->last = list->last->next;
+  list->size += 1;
 }
 
 
 void ioopm_linked_list_prepend(ioopm_list_t *list, elem_t value)
 {
-  ioopm_linked_list_insert(list, 0, value);
+  if (list->first->next == NULL) {
+    list->first->next = list->last = link_new(value, NULL);
+    list->size += 1;
+  } else {
+    list->first->next = link_new(value, list->first->next);
+    list->size += 1;
+  }
 }
 
 
@@ -212,7 +220,7 @@ elem_t ioopm_linked_list_get(ioopm_list_t *list, int index)
   int list_size = ioopm_linked_list_size(list);
   int valid_index = list_inner_adjust_index(index, list_size);  
   node_t *previous_node = list_inner_find_previous(list->first, valid_index);
-
+  
   if (previous_node != NULL)
     {
       return previous_node->next->data;

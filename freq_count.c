@@ -63,7 +63,7 @@ void process_word(char *word, ioopm_hash_table_t *ht)
 void process_file(char *filename, ioopm_hash_table_t *ht)
 {
   FILE *f = fopen(filename, "r");
-
+  int count = 0;
   while (true) 
     {
       char *buf = NULL;
@@ -103,6 +103,12 @@ bool free_keys_from_hash_table(elem_t key, elem_t value_ignored, void *ignored)
   return true;
 }
 
+typedef struct word_count wc_t;
+
+struct word_count {
+  char *str;
+  int count;
+};
 
 int main(int argc, char *argv[])
 {
@@ -117,7 +123,7 @@ int main(int argc, char *argv[])
       
       ioopm_list_t *words = ioopm_hash_table_keys(ht);
       int arr_size = ioopm_linked_list_size(words);
-      char *arr_words[arr_size]; // DUBBELPEKARE M39
+      char *arr_words[arr_size];
       
       for (int i = 0; i < arr_size; i++)
         {
@@ -131,11 +137,12 @@ int main(int argc, char *argv[])
           elem_t temp = {.string = arr_words[i]};
           arr_count[i] = ioopm_hash_table_lookup(ht, temp)->integer;
         }
-      
+
       for (int i = 0; i < arr_size; i++)
-        {
-          printf("%s: %d\n", arr_words[i], arr_count[i]);
-        }
+	{
+	  printf("[%d] %s\n", arr_count[i], arr_words[i]);
+	}
+      
       ioopm_hash_table_apply_to_all(ht, free_keys_from_hash_table, NULL);
       ioopm_hash_table_destroy(ht);
     }
